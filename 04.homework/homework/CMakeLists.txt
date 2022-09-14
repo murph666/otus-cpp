@@ -12,10 +12,15 @@ set(SOURCE_LIB
     include/astnode.hpp
     include/lexer.hpp
     include/parser.hpp
+    include/Add.hpp
+    include/Sub.hpp
+    include/Mul.hpp
+    include/Div.hpp
+    include/Variable.hpp
     include/number.hpp)
 
 add_executable(calc ${SOURCE_EXE} ${SOURCE_LIB})
-target_include_directories(calc PRIVATE include/)
+target_include_directories(calc PRIVATE include)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
     CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
