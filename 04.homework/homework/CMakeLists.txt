@@ -7,10 +7,14 @@ set(SOURCE_EXE
     src/astnode.cpp
     src/lexer.cpp
     src/parser.cpp
-    src/main.cpp
-)
+    src/main.cpp)
+set(SOURCE_LIB
+    include/astnode.hpp
+    include/lexer.hpp
+    include/parser.hpp
+    include/number.hpp)
 
-add_executable(calc ${SOURCE_EXE})
+add_executable(calc ${SOURCE_EXE} ${SOURCE_LIB})
 target_include_directories(calc PRIVATE include/)
 
 if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
