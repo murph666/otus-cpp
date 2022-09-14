@@ -15,7 +15,7 @@ int main() {
     // Mul
     // Div
     // Variable
-
+    std::cout<<"WORK!"<<std::endl;
     // Without implementation that classes this application works only with numbers
 
     Lexer lexer(std::cin);
