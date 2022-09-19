@@ -8,8 +8,6 @@
 #include "parser.hpp"
 
 int main() {
-    std::cout << "-- Старт --" << std::endl;
-
     Lexer lexer(std::cin);
 
     Parser parser(lexer);
@@ -18,6 +16,6 @@ int main() {
     if (ast) {
          ast->print(std::cout);
     }
-    std::cout << "-- Финиш --" << std::endl;
+    
     return 0;
 }
