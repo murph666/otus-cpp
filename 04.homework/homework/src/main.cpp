@@ -8,7 +8,7 @@
 #include "parser.hpp"
 
 int main() {
-//    std::cout << "-- Старт --" << std::endl;
+    std::cout << "-- Старт --" << std::endl;
 
     Lexer lexer(std::cin);
 

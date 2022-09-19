@@ -38,6 +38,11 @@ build*/
 *.txt.user
 .vscode/
 *.user
+CMakeFiles/
+*.cmake
+*.o
+*.so
+*.a
 
 *.autosave
 *.a
@@ -108,4 +113,6 @@ Thumbs.db
 *.dll
 *.exe
 
+04.homework/homework/CMakeLists.txt.user
+04.homework/homework/calc
 04.homework/homework/CMakeLists.txt.user

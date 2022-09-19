@@ -67,6 +67,7 @@ inline Lexer::Lexer(std::istream &in): state_(State::Empty), number_(0), in_(in)
 }
 //Возвращает следущий символ в потоке
 inline char Lexer::next_char() {
+//    std::cout<<"qwe";
     in_.get(ch_);
     return ch_;
 }
