@@ -8,23 +8,16 @@
 #include "parser.hpp"
 
 int main() {
-    // TODO
-    // Implement the next classes:
-    // Add
-    // Sub
-    // Mul
-    // Div
-    // Variable
-    std::cout<<"WORK!"<<std::endl;
-    // Without implementation that classes this application works only with numbers
+//    std::cout << "-- Старт --" << std::endl;
 
     Lexer lexer(std::cin);
+
     Parser parser(lexer);
 
     ASTNode *ast = parser.parse();
     if (ast) {
          ast->print(std::cout);
     }
-
+    std::cout << "-- Финиш --" << std::endl;
     return 0;
 }

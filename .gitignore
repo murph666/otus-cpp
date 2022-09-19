@@ -36,6 +36,8 @@
 build*/
 .idea/
 *.txt.user
+.vscode/
+*.user
 
 *.autosave
 *.a
