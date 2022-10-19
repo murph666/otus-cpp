@@ -2,7 +2,7 @@
 #include <limits>
 #include <cmath>
 #include <vector>
-#include <bits/stdc++.h>
+
 #include <algorithm>
 
 class IStatistics
@@ -108,7 +108,7 @@ public:
 	virtual double eval() const override
 	{
 		double average = std_sum / sequence.size();
-		double sigma;
+		double sigma = 0;
 		for (double el : sequence)
 		{
 			sigma += std::pow((el - average), 2) / sequence.size();
@@ -128,40 +128,42 @@ private:
 class pct : public IStatistics
 {
 public:
-	pct() : pct_value{0}, i_percent{100} { do_name(); }
-	pct(int pct) : pct_value{0}, i_percent{pct} { do_name(); }
+	pct() :  i_percent{100} { do_name(); }
+	pct(int pct) :  i_percent{pct} { do_name(); }
 
 	virtual void update(double next) override
 	{
 		sequence.push_back(next);
-		std::setprecision(5);
-		// std::sort(sequence.begin(), sequence.end());
+		std::sort(sequence.begin(), sequence.end());
+
+	}
+	virtual double eval() const override
+	{
+		double pct_value = 0;
 		double rank = static_cast<double>(i_percent) / 100 * (sequence.size() + 1);
-		rank = std::round(rank * 1000.0);
-		rank /= 1000.0;
 		if (rank - (int)rank == 0)
 		{
 			pct_value = sequence[rank - 1];
 		}
 		else
 		{
-			pct_value = rank - (int)rank;
-			pct_value *= std::abs(sequence[(int)rank - 1] - sequence[(int)rank]);
-			pct_value += sequence[(int)rank];
+			if (static_cast<size_t>(rank) != sequence.size()) {
+				pct_value = rank - (int)rank;
+				pct_value *= std::abs(sequence[(int)rank - 1] - sequence[(int)rank]);
+				pct_value += sequence[(int)rank - 1];
+			}
+			else {
+				pct_value = sequence[(int)rank - 1];
+			}
 		}
-	}
-	virtual double eval() const override
-	{
 		return pct_value;
 	}
 	virtual const char *name() const override
 	{
-
 		return result_name;
 	}
 
 private:
-	double pct_value;
 	std::vector<double> sequence;
 
 	int i_percent;
