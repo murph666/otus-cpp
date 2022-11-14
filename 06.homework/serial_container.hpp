@@ -65,19 +65,14 @@ public:
 	void insert(const unsigned int position, const int value)
 	{
 		std::cout << position <<' '<< value<<std::endl;
-		
-		if (position == total_number)
-		{ // вставляем в конец
-			this -> push_back(value);
-		}
-
 		++capacity;
 		reserve(capacity);
-		// for (unsigned int i = total_number - 1; i > position; --i)
-		// { //проходим с конца и переносим до position включительно
-		// 	data_ptr[i] = data_ptr[i + 1];
-		// }
-		// data_ptr[position] = value;
+		++total_number;
+		for (unsigned int i = total_number - 1; i > position; --i)
+		{ //проходим с конца и переносим до position включительно
+			data_ptr[i] = data_ptr[i - 1];
+		}
+		data_ptr[position] = value;
 	}
 
 	T &operator[](const size_t &place)

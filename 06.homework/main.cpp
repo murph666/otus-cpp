@@ -1,5 +1,23 @@
 #include "serial_container.hpp"
 
+void print_serial_container()
+{
+	for (int i = 0; i < serial_container.size(); ++i)
+	{
+		std::cout << serial_container[i];
+		if (i != serial_container.size() - 1)
+		{
+			std::cout << ", ";
+		}
+		else
+		{
+			std::cout << std::endl;
+		}
+	}
+	std::cout << "Container size: " << serial_container.size() << std::endl
+			  << std::endl;
+}
+
 void test_serial_container()
 {
 	std::cout << "Serial container testing\n"
@@ -12,10 +30,10 @@ void test_serial_container()
 		serial_container.push_back(i);
 	}
 
-	int *ptr = &serial_container[0];
 	for (int i = 0; i < 10; ++i)
 	{
-		std::cout << *(ptr + i);
+		std::cout << serial_container[i];
+		// std::cout << *(ptr + i);
 		if (i != 9)
 		{
 			std::cout << ", ";
@@ -30,13 +48,13 @@ void test_serial_container()
 			  << std::endl;
 	std::cout << "Delete items with the number 3, 5, 7" << std::endl;
 
-	// serial_container.erase(3);
-	// serial_container.erase(5 - 1);
-	// serial_container.erase(7 - 2);
+	serial_container.erase(3);
+	serial_container.erase(5 - 1);
+	serial_container.erase(7 - 2);
 
 	for (int i = 0; i < serial_container.size(); ++i)
 	{
-		std::cout << *(ptr + i);
+		std::cout << serial_container[i];
 		if (i != serial_container.size() - 1)
 		{
 			std::cout << ", ";
@@ -55,7 +73,45 @@ void test_serial_container()
 
 	for (int i = 0; i < serial_container.size(); ++i)
 	{
-		std::cout << *(ptr + i);
+		std::cout << serial_container[i];
+		if (i != serial_container.size() - 1)
+		{
+			std::cout << ", ";
+		}
+		else
+		{
+			std::cout << std::endl;
+		}
+	}
+	std::cout << "Container size: " << serial_container.size() << std::endl
+			  << std::endl;
+
+	std::cout << "Insert 20 at half position" << std::endl;
+
+	serial_container.insert(serial_container.size() / 2, 20);
+
+	for (int i = 0; i < serial_container.size(); ++i)
+	{
+		std::cout << serial_container[i];
+		if (i != serial_container.size() - 1)
+		{
+			std::cout << ", ";
+		}
+		else
+		{
+			std::cout << std::endl;
+		}
+	}
+	std::cout << "Container size: " << serial_container.size() << std::endl
+			  << std::endl;
+
+	std::cout << "Insert 30 at end position" << std::endl;
+
+	serial_container.insert(serial_container.size(), 30);
+
+	for (int i = 0; i < serial_container.size(); ++i)
+	{
+		std::cout << serial_container[i];
 		if (i != serial_container.size() - 1)
 		{
 			std::cout << ", ";
