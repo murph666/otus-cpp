@@ -7,6 +7,32 @@ template <typename T>
 class SerialContainer
 {
 public:
+	struct Iterator
+	{
+		Iterator(): iter_ptr{nullptr}{}
+		explicit Iterator(T* new_iter_ptr) : iter_ptr{ new_iter_ptr } {}
+
+		T* operator++(){
+			iter_ptr = iter_ptr + 1;
+			return iter_ptr;
+
+		}
+		T& operator*(){
+			return *iter_ptr;
+		}
+
+		bool operator==(const Iterator& another){
+			return (iter_ptr == another.iter_ptr);
+		}
+
+		bool operator!=(const Iterator& another){
+			return !(iter_ptr == another.iter_ptr);
+		}
+	private:
+	T* iter_ptr;
+	};
+	
+
 	SerialContainer() : data_ptr{nullptr}, total_number{0}, capacity{0}
 	{
 		std::cout << "Serial Container default constructor" << std::endl;
@@ -21,15 +47,15 @@ public:
 	}
 	int size() { return total_number; }
 
-	void reserve(const unsigned int new_capacity)
+	void reserve()
 	{
 
-		T *new_data_ptr = new T[new_capacity]; //отводим место под новый массив
+		T *new_data_ptr = new T[capacity]; //отводим место под новый массив
 
 		if (data_ptr == nullptr)
 		{ //если массив пустой
 			data_ptr = new_data_ptr;
-			capacity = new_capacity;
+
 			return;
 		}
 		// for (unsigned int i = 0; i < data_ptr[i]; ++i)
@@ -41,13 +67,12 @@ public:
 		delete[] data_ptr; //удаляем старый
 
 		data_ptr = new_data_ptr;
-		capacity = new_capacity;
 	}
 
 	void push_back(const T &value)
 	{
 		++capacity;
-		reserve(capacity);
+		reserve();
 		data_ptr[total_number] = value;
 		++total_number;
 	}
@@ -64,9 +89,8 @@ public:
 
 	void insert(const unsigned int position, const int value)
 	{
-		std::cout << position <<' '<< value<<std::endl;
 		++capacity;
-		reserve(capacity);
+		reserve();
 		++total_number;
 		for (unsigned int i = total_number - 1; i > position; --i)
 		{ //проходим с конца и переносим до position включительно
@@ -80,9 +104,33 @@ public:
 		return data_ptr[place];
 	}
 
+	Iterator begin() const{
+		return Iterator(&data_ptr[0]);
+	}
+
+	Iterator last_valid() const{
+		return Iterator(&data_ptr[total_number - 1]);
+	}
+
+	Iterator end() const{
+		return Iterator(&data_ptr[total_number]);
+	}
+
+
 private:
 	T *data_ptr; //массив указателей <Т> типа
 
 	unsigned int total_number; //общая длинна
 	unsigned int capacity;	   //емкость
 };
+
+template <typename T>
+std::ostream& operator<<(std::ostream& os, const SerialContainer<T>& container){
+	for(auto iter = container.begin(); iter != container.end(); ++iter)
+	{
+		os << *iter;
+		if (iter != container.last_valid()) {os << ", ";}
+		else {os << std::endl;}
+	} 
+	return os;
+}
