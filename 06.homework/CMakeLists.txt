@@ -8,6 +8,7 @@ set(SOURCE_EXE
     main.cpp)
 set(SOURCE_LIB
     serial_container.hpp
+    one_way_list_container.hpp
 )
 
 add_executable(main ${SOURCE_EXE} ${SOURCE_LIB})

@@ -32,8 +32,7 @@ public:
 	T* iter_ptr;
 	};
 	
-
-	SerialContainer() : data_ptr{nullptr}, total_number{0}, capacity{0}
+	SerialContainer() : data_ptr{nullptr}, total_number{0}, total_capacity{0}
 	{
 		std::cout << "Serial Container default constructor" << std::endl;
 	}
@@ -45,12 +44,15 @@ public:
 			delete[] data_ptr;
 		}
 	}
+	
 	int size() { return total_number; }
+	
+	int capacity() { return total_capacity; }
 
 	void reserve()
 	{
 
-		T *new_data_ptr = new T[capacity]; //отводим место под новый массив
+		T *new_data_ptr = new T[total_capacity]; //отводим место под новый массив
 
 		if (data_ptr == nullptr)
 		{ //если массив пустой
@@ -67,12 +69,16 @@ public:
 		delete[] data_ptr; //удаляем старый
 
 		data_ptr = new_data_ptr;
+
 	}
 
 	void push_back(const T &value)
 	{
-		++capacity;
-		reserve();
+		if (total_number == total_capacity){
+			total_capacity = (total_capacity == 0) ? 5: static_cast<unsigned int>(total_capacity * 1.6);
+			reserve();
+		}
+		
 		data_ptr[total_number] = value;
 		++total_number;
 	}
@@ -87,10 +93,13 @@ public:
 		--total_number;
 	}
 
-	void insert(const unsigned int position, const int value)
+	void insert(const unsigned int position, const T &value)
 	{
-		++capacity;
-		reserve();
+		if (total_number == total_capacity){
+			total_capacity = (total_capacity == 0) ? 5: static_cast<unsigned int>(total_capacity * 1.6);
+
+			reserve();
+		}
 		++total_number;
 		for (unsigned int i = total_number - 1; i > position; --i)
 		{ //проходим с конца и переносим до position включительно
@@ -118,10 +127,10 @@ public:
 
 
 private:
-	T *data_ptr; //массив указателей <Т> типа
+	T *data_ptr; 					//массив указателей <Т> типа
 
-	unsigned int total_number; //общая длинна
-	unsigned int capacity;	   //емкость
+	unsigned int total_number; 		//общая длинна
+	unsigned int total_capacity;	//емкость
 };
 
 template <typename T>
