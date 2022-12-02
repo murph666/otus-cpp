@@ -10,6 +10,7 @@ cd /opt
 mkdir -p build && cd build
 cmake  ..
 cmake --build .
+make install
 ```
 ## OpenCV и Cmake
 ```
