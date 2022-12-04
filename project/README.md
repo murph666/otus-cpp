@@ -5,11 +5,12 @@ wget -O opencv.zip https://github.com/opencv/opencv/archive/4.x.zip
 sudo unzip opencv.zip -d /opt/
 cd /opt
 ```
-Создаешь build дирректорию. Конфигурируешь. Билдишь.
+Создаешь build дирректорию. Конфигурируешь. Билдишь. Устанавливаешь.
 ```
 mkdir -p build && cd build
 cmake  ..
 cmake --build .
+make install
 ```
 ## OpenCV и Cmake
 ```
