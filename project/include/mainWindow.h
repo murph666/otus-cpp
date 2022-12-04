@@ -16,7 +16,9 @@ class MainWindow : public QObject
     Q_OBJECT
 
 public:
-    explicit MainWindow(QQmlApplicationEngine *engine = nullptr);
+    explicit MainWindow(QQmlApplicationEngine *engine = nullptr,
+                        ObjectCamVideo* camera = nullptr,
+                        OpencvImageProvider* liveImageProvider = nullptr);
 
     ComboBoxModel listOfCameras; //объект модель для comboConnectedDevice
 
@@ -27,12 +29,11 @@ private slots:
 
 private:
     QQmlApplicationEngine   *engine;
-    ObjectCamVideo          *camera             = new ObjectCamVideo;
-    OpencvImageProvider     *liveImageProvider  = new OpencvImageProvider;
+    ObjectCamVideo          *camera;
+    OpencvImageProvider     *liveImageProvider;
 
     void                    *m_hWnd;
     bool                    m_bGrabbing;
-
 
     //для всплывающего окна с ошибкой/предупреждением
     void ShowErrorMsg(QString csMessage, int nErrorNum);

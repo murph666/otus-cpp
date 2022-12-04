@@ -1,8 +1,10 @@
 #include "opencvimageprovider.h"
+#include <iostream>
 
 OpencvImageProvider::OpencvImageProvider(QObject *parent)
     : QQuickImageProvider(QQuickImageProvider::Image)
 {
+    std::cout <<"OpencvImageProvider constructor: " << this << std::endl;
     image = QImage(200,200,QImage::Format_RGB32);
     image.fill(QColor("black"));
 }
@@ -23,6 +25,7 @@ QImage OpencvImageProvider::requestImage(const QString &id, QSize *size, const Q
 
 void OpencvImageProvider::updateImage(const QImage &image)
 {
+    std::cout << "image" << std::endl;
     if(!image.isNull() && this->image != image) {
         this->image = image;
         emit imageChanged();

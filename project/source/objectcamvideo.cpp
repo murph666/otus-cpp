@@ -4,7 +4,7 @@
 ObjectCamVideo::ObjectCamVideo(QObject *parent)
     : QObject{parent}
 {
-    std::cout <<"ObjectCamVideo constructor" << std::endl;
+    std::cout <<"ObjectCamVideo constructor: "<< this << std::endl;
 }
 
 void ObjectCamVideo::openCamera(){
@@ -15,24 +15,20 @@ void ObjectCamVideo::openCamera(){
         std::cout << "ERROR! Unable to open camera\n" << std::endl;
     }
     this -> moveToThread(this->threadStreamer);
-    QObject::connect(threadStreamer,SIGNAL(started()),this,SLOT(streamerThreadSlot()));
-    QObject::connect(this,&ObjectCamVideo::emitThreadImage,this,&ObjectCamVideo::catchFrame);
+    QObject::connect(threadStreamer,SIGNAL(started()),
+                     this, this -> streamerThread());
     this->threadStreamer->start();
 }
 
-void ObjectCamVideo::catchFrame(cv::Mat emittedFrame)
-{
-    frame = emittedFrame;
-}
-
-void ObjectCamVideo::streamerThreadSlot()
+void ObjectCamVideo::streamerThread()
 {
     while (true) {
         cap->read(frame);
-
-        if(frame.data)
-            emit emitThreadImage(frame);
-
+        if(frame.data){
+            std::cout <<"emit"<< std::endl;
+            QImage img = QImage(frame.data,frame.cols,frame.rows,QImage::Format_RGB888).rgbSwapped();
+            emit emitImage(img);
+        }
         if(QThread::currentThread()->isInterruptionRequested())
         {
             cap->release();

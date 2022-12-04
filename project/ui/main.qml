@@ -34,21 +34,19 @@ Window {
         anchors.fill: parent
         anchors.margins: 10
         anchors.topMargin: 60
+
         Image{
             id: opencvImage
             anchors.fill: parent
+            anchors.margins: 10
+            anchors.bottomMargin: buttonCameraSearch.height + 10
             fillMode: Image.PreserveAspectFit
             property bool counter: false
             visible: false
-            source: "image://stream/"
+            source: "image://stream/image"
             asynchronous: false
             cache: false
 
-            function reload()
-            {
-                counter = !counter
-                source = "image://stream/"
-            }
         }
 
         Row {
@@ -100,11 +98,6 @@ Window {
                 onClicked: mainWindow.btnConnectClicked()
             }
         }
-    }
-
-    Connections {
-        target: imageProvider
-        function onImageUpdated() { image.reload() }
     }
 }
 
