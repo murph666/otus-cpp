@@ -56,7 +56,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_AUTOUIC_SEARCH_PATHS} ${FORMS_DIR})
 if (WIN32)
     add_executable(MY_PROJECT WIN32 ${SOURCES})
 elseif(UNIX)
-    add_executable(MY_PROJECT ${SOURCES} ./ui/main.qml)
+    add_executable(MY_PROJECT ${SOURCES})
 endif()
 
 # Add the target includes for MY_PROJECT

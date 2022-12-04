@@ -3,7 +3,8 @@
 
 #include <QObject>
 #include <QThread>
-#include <opencv2/core/core.hpp>
+#include <opencv2/core.hpp>
+#include <opencv2/videoio.hpp>
 
 class ObjectCamVideo : public QObject
 {
@@ -11,19 +12,16 @@ class ObjectCamVideo : public QObject
 public:
     explicit ObjectCamVideo(QObject *parent = nullptr);
 
-public:
-
-
-    void streamVideo();
     QThread* threadStreamer = new QThread();
     void catchFrame(cv::Mat emittedFrame);
 
 public slots:
-    void openVideoCamera(QString path);
+    void openCamera();
     void streamerThreadSlot();
 
 private:
     cv::Mat frame;
+    cv::VideoCapture *cap = new cv::VideoCapture;
 
 signals:
     void newImage(QImage &);

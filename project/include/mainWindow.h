@@ -1,13 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
-//#include "MvCamera.h"
-
 #include <QtCore>
 #include <QQmlApplicationEngine>
+#include <QMessageBox>
+#include <iostream>
 
 #include "comboboxmodel.h"
+#include "objectcamvideo.h"
+#include "opencvimageprovider.h"
 
 
 class MainWindow : public QObject
@@ -15,30 +16,28 @@ class MainWindow : public QObject
     Q_OBJECT
 
 public:
-//    void static __stdcall ImageCallBack(unsigned char * pData, MV_FRAME_OUT_INFO_EX* pFrameInfo, void* pUser);
-//    void ImageCallBackInner(unsigned char * pData, MV_FRAME_OUT_INFO_EX* pFrameInf);
+    explicit MainWindow(QQmlApplicationEngine *engine = nullptr);
 
-    ComboBoxModel listOfCameras; //модель для comboConnectedDevice
-private:
-    void ShowErrorMsg(QString csMessage, int nErrorNum);
+    ComboBoxModel listOfCameras; //объект модель для comboConnectedDevice
 
-    void OpenCamera();
-
+    //слоты для QML
 private slots:
-    void on_bnSearchClicked();
-
-    void on_tfEditingFinished(const QString &msg);
-
-    void on_cboxAccepted(const int &count);
-
+    void on_btnSearchClicked();
+    void on_btnConnectClicked();
 
 private:
+    QQmlApplicationEngine   *engine;
+    ObjectCamVideo          *camera             = new ObjectCamVideo;
+    OpencvImageProvider     *liveImageProvider  = new OpencvImageProvider;
+
     void                    *m_hWnd;
-//    MV_CC_DEVICE_INFO_LIST  m_stDevList;
-//    CMvCamera*              m_pcMyCamera;
     bool                    m_bGrabbing;
 
-    QQmlApplicationEngine*  engine;
+
+    //для всплывающего окна с ошибкой/предупреждением
+    void ShowErrorMsg(QString csMessage, int nErrorNum);
+    void ConnectSignals();
+
 };
 
 #endif // MAINWINDOW_H

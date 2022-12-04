@@ -1,19 +1,37 @@
 #include "mainWindow.h"
-#include <QMessageBox>
-#include <iostream>
-
+#include "qqmlcontext.h"
 //QMessageBox::information(NULL, "Error", errorMsg);
 
-
-
-void MainWindow::on_bnSearchClicked(){
-    std::cout << "on_bnEnumClicked" << std::endl;
+MainWindow::MainWindow(QQmlApplicationEngine *engine){
+    std::cout <<"MainWindow constructor" << std::endl;
+    this -> engine = engine;
+    this -> ConnectSignals();
 }
 
-void MainWindow::on_cboxAccepted(const int &value){
-    std::cout << value << std::endl;
+void MainWindow::ConnectSignals(){
+    // создаю поинтер на список объектов с QML для подключение сигнала к слоту
+    QObject* item = (QObject*)this -> engine -> rootObjects().at(0);
+
+//    this -> engine -> rootContext() -> setContextProperty("VideoStreamer", camera);
+//    this -> engine -> rootContext() -> setContextProperty("liveImageProvider", liveImageProvider);
+//    this -> engine -> addImageProvider("live",liveImageProvider);
+
+    //Сигнал с private slots объекта MainWindow без параметров функции
+    QObject::connect(item, SIGNAL(btnSearchClicked()),
+                     this, SLOT(on_btnSearchClicked()));
+
+    QObject::connect(item, SIGNAL(btnConnectClicked()),
+                     this, SLOT(on_btnConnectClicked()));
+
 }
 
-void MainWindow::on_tfEditingFinished(const QString &callback){
-    std::cout << &callback << std::endl;
+void MainWindow::on_btnSearchClicked(){
+    std::cout << "on_btnSearchClicked" << std::endl;
+
+
+}
+
+void MainWindow::on_btnConnectClicked(){
+    std::cout << "on_btnConnectClicked" << std::endl;
+    camera->openCamera();
 }
