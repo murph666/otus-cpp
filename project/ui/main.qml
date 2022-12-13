@@ -37,14 +37,13 @@ Window {
 
         Image{
             id: opencvImage
+
             anchors.fill: parent
             anchors.margins: 10
             anchors.bottomMargin: buttonCameraSearch.height + 10
             fillMode: Image.PreserveAspectFit
-            property bool counter: false
-            visible: false
+            visible: true
             source: "image://stream/image"
-            asynchronous: false
             cache: false
 
         }

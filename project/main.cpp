@@ -16,8 +16,6 @@ int main(int argc, char *argv[])
     ObjectCamVideo camera;
     OpencvImageProvider liveImageProvider;
 
-    std::cout <<"main engine: " << &engine << std::endl;
-
     const QUrl url(u"/home/murph/Documents/GitHub/otus-cpp/project/ui/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
                      &app, [url](QObject *obj, const QUrl &objUrl) {
@@ -25,9 +23,9 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-//    QObject::connect(&camera, SIGNAL(emitThreadImage(cv::Mat)),
-//                     &liveImageProvider, &OpencvImageProvider::updateImage());
-//    engine.rootContext()->setContextProperty();
+    //    QObject::connect(&camera, SIGNAL(emitThreadImage(cv::Mat)),
+    //                     &liveImageProvider, &OpencvImageProvider::updateImage());
+    //    engine.rootContext()->setContextProperty();
     engine.rootContext()->setContextProperty("liveImageProvider", &liveImageProvider);
     engine.addImageProvider("stream", &liveImageProvider);
 

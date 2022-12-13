@@ -21,7 +21,7 @@ private:
     cv::VideoCapture *cap       = new cv::VideoCapture;
     QThread* threadStreamer     = new QThread();
 
-
+private slots:
     void streamerThread();
 
 signals:

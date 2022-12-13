@@ -5,10 +5,10 @@
 MainWindow::MainWindow(QQmlApplicationEngine *engine,
                        ObjectCamVideo* camera,
                        OpencvImageProvider* liveImageProvider){
-    std::cout <<"MainWindow constructor" << std::endl;
     this -> engine = engine;
     this -> camera = camera;
     this -> liveImageProvider = liveImageProvider;
+
 
     this -> ConnectSignals();
 }
@@ -16,8 +16,6 @@ MainWindow::MainWindow(QQmlApplicationEngine *engine,
 void MainWindow::ConnectSignals(){
     // создаю поинтер на список объектов с QML для подключение сигнала к слоту
     QObject* item = (QObject*)this -> engine -> rootObjects().at(0);
-
-
 
     //Сигнал с private slots объекта MainWindow без параметров функции
     QObject::connect(item, SIGNAL(btnSearchClicked()),

@@ -14,9 +14,8 @@ void ObjectCamVideo::openCamera(){
     if (!cap->isOpened()) {
         std::cout << "ERROR! Unable to open camera\n" << std::endl;
     }
-    this -> moveToThread(this->threadStreamer);
-    QObject::connect(threadStreamer,SIGNAL(started()),
-                     this, this -> streamerThread());
+    this -> moveToThread(threadStreamer);
+    QObject::connect(threadStreamer, SIGNAL(started()), this, SLOT(streamerThread()));
     this->threadStreamer->start();
 }
 

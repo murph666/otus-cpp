@@ -32,8 +32,8 @@ private:
     ObjectCamVideo          *camera;
     OpencvImageProvider     *liveImageProvider;
 
-    void                    *m_hWnd;
-    bool                    m_bGrabbing;
+//    void                    *m_hWnd;
+//    bool                    m_bGrabbing;
 
     //для всплывающего окна с ошибкой/предупреждением
     void ShowErrorMsg(QString csMessage, int nErrorNum);

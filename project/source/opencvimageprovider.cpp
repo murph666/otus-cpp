@@ -5,14 +5,14 @@ OpencvImageProvider::OpencvImageProvider(QObject *parent)
     : QQuickImageProvider(QQuickImageProvider::Image)
 {
     std::cout <<"OpencvImageProvider constructor: " << this << std::endl;
-    image = QImage(200,200,QImage::Format_RGB32);
-    image.fill(QColor("black"));
+    image = QImage(500,200,QImage::Format_RGB32);
+    image.fill(QColor("yellow"));
 }
 
 QImage OpencvImageProvider::requestImage(const QString &id, QSize *size, const QSize &requestedSize)
 {
     Q_UNUSED(id);
-
+    std::cout <<"OpencvImageProvider requestImage" << std::endl;
     if(size){
         *size = image.size();
     }
