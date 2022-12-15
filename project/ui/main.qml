@@ -10,13 +10,13 @@ Window {
     height: 400
 
     color: "#C2A83E"
-    //    flags: Qt.FramelessWindowHint
+    flags: Qt.FramelessWindowHint
 
     //Объявляем сигналы
     signal btnSearchClicked()
     signal btnConnectClicked()
-//    signal textFieldEditingFinished(msg: string)
-//    signal cboxAccepted(count: int)
+    //    signal textFieldEditingFinished(msg: string)
+    signal cboxAccepted(count: int)
 
     //Расположить Окно по центру
     //    screen: Qt.application.screens[2]
@@ -25,33 +25,45 @@ Window {
         mainWindow.y = Screen.virtualY + (Screen.height - this.height) / 2
     }
 
+    Connections {
+        target: liveImageProvider
+        function onImageChanged() { opencvImage.reload() }
+    }
+
     Rectangle{
         id: mainLayout
         visible: true
         color: "#E0EEC6"
         radius: 20
-
+        property bool counter: false
         anchors.fill: parent
         anchors.margins: 10
         anchors.topMargin: 60
 
         Image{
             id: opencvImage
+            readonly property string providerSource: "image://stream/";
 
             anchors.fill: parent
             anchors.margins: 10
             anchors.bottomMargin: buttonCameraSearch.height + 10
-            fillMode: Image.PreserveAspectFit
             visible: true
-            source: "image://stream/image"
+            fillMode: Image.PreserveAspectFit
+            asynchronous: false
             cache: false
+
+            function reload() {
+                var oldSource = providerSource;
+                source = "";
+                source = oldSource;
+            }
 
         }
 
         Row {
             id: row
-            width: mainLayout.width - 300
-            spacing: row.width - 2 * buttonCameraSearch.width
+
+            spacing: 20
 
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 5
@@ -77,6 +89,15 @@ Window {
                 onClicked: mainWindow.btnSearchClicked()
             }
 
+            ComboBox {
+                id: comboConnectedDevice
+                Layout.alignment: Qt.AlignHCenter
+                Layout.fillWidth: true
+                model: connectedDeviceModel.comboList
+                onActivated: mainWindow.cboxAccepted(this.currentIndex)
+
+            }
+
             Button {
                 id: buttonCameraConnect
                 text: "Connect"
@@ -98,5 +119,13 @@ Window {
             }
         }
     }
+    //    Connections{
+    //        target: liveImageProvider
+
+    //        function onImageChanged()
+    //        {
+    //            opencvImage.reload()
+    //        }
+    //    }
 }
 

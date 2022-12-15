@@ -7,6 +7,7 @@
 #include <opencv2/videoio.hpp>
 
 #include "mainWindow.h"
+#include "comboboxmodel.h"
 
 int main(int argc, char *argv[])
 {
@@ -15,6 +16,7 @@ int main(int argc, char *argv[])
     QQmlApplicationEngine engine;
     ObjectCamVideo camera;
     OpencvImageProvider liveImageProvider;
+    ComboBoxModel listOfCameras; //объект модель для comboConnectedDevice
 
     const QUrl url(u"/home/murph/Documents/GitHub/otus-cpp/project/ui/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -23,14 +25,10 @@ int main(int argc, char *argv[])
             QCoreApplication::exit(-1);
     }, Qt::QueuedConnection);
 
-    //    QObject::connect(&camera, SIGNAL(emitThreadImage(cv::Mat)),
-    //                     &liveImageProvider, &OpencvImageProvider::updateImage());
-    //    engine.rootContext()->setContextProperty();
-    engine.rootContext()->setContextProperty("liveImageProvider", &liveImageProvider);
+    //переопределяю qml на объекты cpp
+    engine.rootContext() -> setContextProperty("connectedDeviceModel", &listOfCameras);
+    engine.rootContext() -> setContextProperty("liveImageProvider", &liveImageProvider);
     engine.addImageProvider("stream", &liveImageProvider);
-
-    //    переопределяю combobox на объект ComboBoxModel который объявляю в header MainWindow.
-    //    engine.rootContext() -> setContextProperty("connectedDeviceModel", &backend.listOfCameras);
 
     engine.load(url);
     MainWindow backend(&engine, &camera, &liveImageProvider);

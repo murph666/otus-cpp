@@ -17,23 +17,23 @@ class MainWindow : public QObject
 
 public:
     explicit MainWindow(QQmlApplicationEngine *engine = nullptr,
-                        ObjectCamVideo* camera = nullptr,
-                        OpencvImageProvider* liveImageProvider = nullptr);
+                        ObjectCamVideo *camera = nullptr,
+                        OpencvImageProvider *liveImageProvider = nullptr,
+                        ComboBoxModel *listOfCameras = nullptr);
 
-    ComboBoxModel listOfCameras; //объект модель для comboConnectedDevice
+
 
     //слоты для QML
 private slots:
     void on_btnSearchClicked();
     void on_btnConnectClicked();
+    void on_cboxAccepted(int count);
 
 private:
     QQmlApplicationEngine   *engine;
     ObjectCamVideo          *camera;
     OpencvImageProvider     *liveImageProvider;
-
-//    void                    *m_hWnd;
-//    bool                    m_bGrabbing;
+    ComboBoxModel           *listOfCameras;
 
     //для всплывающего окна с ошибкой/предупреждением
     void ShowErrorMsg(QString csMessage, int nErrorNum);
