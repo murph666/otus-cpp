@@ -3,14 +3,9 @@
 ComboBoxModel::ComboBoxModel(QObject *parent) :
     QObject(parent)
 {
-//    std::cout << "ComboBoxModel created" << std::endl;
+    //    std::cout << "ComboBoxModel created" << std::endl;
 }
 
-ComboBoxModel::ComboBoxModel(const QStringList &list, int count, QObject *parent) :
-    QObject(parent), m_comboList(list), m_count(count)
-{
-
-}
 
 const QStringList ComboBoxModel::comboList()
 {
@@ -19,11 +14,11 @@ const QStringList ComboBoxModel::comboList()
 
 void ComboBoxModel::setComboList(const QStringList &comboList)
 {
-
     if (m_comboList != comboList)
     {
         m_comboList = comboList;
         emit comboListChanged();
+        setCount(comboList.size());
     }
 
 }

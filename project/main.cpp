@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     engine.addImageProvider("stream", &liveImageProvider);
 
     engine.load(url);
-    MainWindow backend(&engine, &camera, &liveImageProvider);
+    MainWindow backend(&engine, &camera, &liveImageProvider, &listOfCameras);
 
     if (engine.rootObjects().isEmpty())
         return -1;

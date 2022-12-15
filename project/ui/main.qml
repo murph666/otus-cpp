@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
+//import QtQuick.Controls.Material 2.15
 
 Window {
     id: mainWindow
@@ -10,7 +11,7 @@ Window {
     height: 400
 
     color: "#C2A83E"
-    flags: Qt.FramelessWindowHint
+    //    flags: Qt.FramelessWindowHint
 
     //Объявляем сигналы
     signal btnSearchClicked()
@@ -19,7 +20,8 @@ Window {
     signal cboxAccepted(count: int)
 
     //Расположить Окно по центру
-    //    screen: Qt.application.screens[2]
+//    screen: Qt.application.screens[2]
+//    visibility: "FullScreen"
     Component.onCompleted: {
         mainWindow.x = Screen.virtualX + (Screen.width - this.width) / 2
         mainWindow.y = Screen.virtualY + (Screen.height - this.height) / 2
@@ -62,11 +64,10 @@ Window {
 
         Row {
             id: row
-
+            width: parent.width - 20
             spacing: 20
-
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 5
+            anchors.bottomMargin: 10
             anchors.horizontalCenter: parent.horizontalCenter
 
             Button {
@@ -91,11 +92,29 @@ Window {
 
             ComboBox {
                 id: comboConnectedDevice
+                width: parent.width - 240
+                height: parent.height
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
                 model: connectedDeviceModel.comboList
-                onActivated: mainWindow.cboxAccepted(this.currentIndex)
 
+                contentItem: Text {
+                    leftPadding: 0
+                    rightPadding: parent.indicator.width + parent.spacing
+
+                    text: parent.displayText
+                    font: parent.font
+                    color: "#F1F7ED"//parent.pressed ? "#7CA982" : "#7CA982"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+
+                background: Rectangle {
+                    radius: 5
+                    color: parent.down ? "#7CA982" :
+                                         (parent.hovered ? "#243E36" : "#7CA982")
+                }
+                onActivated: mainWindow.cboxAccepted(this.currentIndex)
             }
 
             Button {
@@ -129,3 +148,9 @@ Window {
     //    }
 }
 
+
+/*##^##
+Designer {
+    D{i:0;formeditorZoom:16}
+}
+##^##*/

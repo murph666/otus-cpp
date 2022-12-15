@@ -14,8 +14,6 @@ class ComboBoxModel : public QObject
 
 public:
     ComboBoxModel(QObject *parent = 0);
-    ComboBoxModel(const QStringList &list,int count, QObject *parent = 0);
-
     const QStringList comboList();
 
     int count();
@@ -23,6 +21,7 @@ public:
     void clear();
 
     Q_INVOKABLE void removeElement(int index);
+    void setComboList(const QStringList &comboList);
 
 signals:
     void comboListChanged();
@@ -30,7 +29,7 @@ signals:
 
 public slots:
     Q_INVOKABLE void addElement(const QString &element);
-    void setComboList(const QStringList &comboList);
+
 
 private:
     QStringList m_comboList;

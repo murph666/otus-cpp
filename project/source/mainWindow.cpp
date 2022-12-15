@@ -34,20 +34,16 @@ void MainWindow::ConnectSignals(){
 }
 
 void MainWindow::on_btnSearchClicked(){
-    std::cout << "on_btnSearchClicked" << std::endl;
     QStringList comboList = camera->searchConnectedCameras();
-
-    qDebug() << comboList;
     listOfCameras->setComboList(comboList);
+
 }
 
 void MainWindow::on_btnConnectClicked(){
-    std::cout << "on_btnConnectClicked" << std::endl;
     camera->openCamera();
 }
 
 void MainWindow::on_cboxAccepted(int count){
-    std::cout << "on_btnSearchClicked" << std::endl;
-    camera -> searchConnectedCameras();
+    std::cout << "on_cboxAccepted" << std::endl;
 }
 
