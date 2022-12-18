@@ -15,18 +15,24 @@ class ObjectCamVideo : public QObject
 public:
     explicit ObjectCamVideo(QObject *parent = nullptr);
 
+    void __stdcall ImageCallBack(unsigned char * pData, MV_FRAME_OUT_INFO_EX* pFrameInfo);
+    void ImageCallBackInner(unsigned char * pData, MV_FRAME_OUT_INFO_EX* pFrameInf);
+
     QStringList             searchConnectedCameras();
-    void openCamera();
+    void                    openCamera(int *cameraNumber);
+    void                    startGrabbing();
+    void                    stopGrabbing();
+
+    bool                    m_bGrabbing = false;
 
 private:
     //    cv::Mat frame;
     //    cv::VideoCapture *cap       = new cv::VideoCapture;
-    QThread                 *threadStreamer= new QThread();
+    QThread                 *threadStreamer = new QThread();
     void                    *m_hWnd;
 
     MV_CC_DEVICE_INFO_LIST  m_stDevList;
-    CMvCamera               *m_pcMyCamera;
-    bool                    m_bGrabbing;
+    CMvCamera               *m_pcMyCamera = new CMvCamera();
 
 
 

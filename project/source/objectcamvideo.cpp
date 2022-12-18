@@ -6,20 +6,131 @@ ObjectCamVideo::ObjectCamVideo(QObject *parent)
     : QObject{parent}
 {
     std::cout <<"ObjectCamVideo constructor: "<< this << std::endl;
-}
-
-void ObjectCamVideo::openCamera(){
-    int deviceID = 0;             // 0 = open default camera
-    int apiID = cv::CAP_ANY;
-
     this -> moveToThread(threadStreamer);
     QObject::connect(threadStreamer, SIGNAL(started()), this, SLOT(streamerThread()));
+}
+
+void __stdcall ObjectCamVideo::ImageCallBack(unsigned char *pData, MV_FRAME_OUT_INFO_EX *pFrameInfo){
+    this -> ImageCallBackInner(pData, pFrameInfo);
+}
+
+void ObjectCamVideo::ImageCallBackInner(unsigned char *pData, MV_FRAME_OUT_INFO_EX *pFrameInfo)
+{
+    MV_DISPLAY_FRAME_INFO stDisplayInfo;
+    memset(&stDisplayInfo, 0, sizeof(MV_DISPLAY_FRAME_INFO));
+
+    stDisplayInfo.hWnd = m_hWnd;
+    stDisplayInfo.pData = pData;
+    stDisplayInfo.nDataLen = pFrameInfo->nFrameLen;
+    stDisplayInfo.nWidth = pFrameInfo->nWidth;
+    stDisplayInfo.nHeight = pFrameInfo->nHeight;
+    stDisplayInfo.enPixelType = pFrameInfo->enPixelType;
+    m_pcMyCamera->DisplayOneFrame(&stDisplayInfo);
+}
+
+void ObjectCamVideo::openCamera(int *cameraNumber){
+    int nIndex = *cameraNumber;
+    if (NULL == m_stDevList.pDeviceInfo[nIndex])
+    {
+        //        ShowErrorMsg("Device does not exist", 0);
+        std::cout << "Device does not exist" << std::endl;
+        return;
+    }
+
+    int nRet = m_pcMyCamera->Open(m_stDevList.pDeviceInfo[nIndex]);
+    if (MV_OK != nRet)
+    {
+        delete m_pcMyCamera;
+        m_pcMyCamera = NULL;
+        //        ShowErrorMsg("Open Fail", nRet);
+        std::cout << "Open Fail" << std::endl;
+        return;
+    }
+    else{
+        std::cout << "Open Succes" << std::endl;
+    }
+
+    if (m_stDevList.pDeviceInfo[nIndex]->nTLayerType == MV_GIGE_DEVICE)
+    {
+        unsigned int nPacketSize = 0;
+        nRet = m_pcMyCamera->GetOptimalPacketSize(&nPacketSize);
+        if (nRet == MV_OK)
+        {
+            nRet = m_pcMyCamera->SetIntValue("GevSCPSPacketSize",nPacketSize);
+            if(nRet != MV_OK)
+            {
+                //                ShowErrorMsg("Warning: Set Packet Size fail!", nRet);
+                std::cout << "Warning: Set Packet Size fail!" << std::endl;
+            }
+        }
+        else
+        {
+            //            ShowErrorMsg("Warning: Get Packet Size fail!", nRet);
+            std::cout << "Get Packet Size fail!" << std::endl;
+
+        }
+    }
+
+    m_pcMyCamera->SetEnumValue("AcquisitionMode", MV_ACQ_MODE_CONTINUOUS);
+    m_pcMyCamera->SetEnumValue("TriggerMode", MV_TRIGGER_MODE_OFF);
+
+}
+
+void ObjectCamVideo::startGrabbing(){
+    //    m_pcMyCamera -> RegisterImageCallBack(ImageCallBack, this);
+    int nRet = m_pcMyCamera->StartGrabbing();
+    if (MV_OK != nRet)
+    {
+        std::cout << "Start grabbing fail" << std::endl;
+        //            ShowErrorMsg("Start grabbing fail", nRet);
+        return;
+    }
+    m_bGrabbing = true;
     this->threadStreamer->start();
+}
+
+void ObjectCamVideo::stopGrabbing(){
+    this -> threadStreamer->exit();
+    int nRet = m_pcMyCamera->StopGrabbing();
+    if (MV_OK != nRet)
+    {
+        std::cout << "Stop grabbing fail" << std::endl;
+        //        ShowErrorMsg("Stop grabbing fail", nRet);
+        return;
+    }
+    m_bGrabbing = false;
+
 }
 
 void ObjectCamVideo::streamerThread()
 {
-    while (true) {
+    int nRet = MV_OK;
+
+    MV_FRAME_OUT stOutFrame = {0};
+    memset(&stOutFrame, 0, sizeof(MV_FRAME_OUT));
+    while(1)
+        {
+            nRet = MV_CC_GetImageBuffer(m_hWnd, &stOutFrame, 1000);
+            if (nRet == MV_OK)
+            {
+                printf("Get One Frame: Width[%d], Height[%d], nFrameNum[%d]\n",
+                    stOutFrame.stFrameInfo.nWidth, stOutFrame.stFrameInfo.nHeight, stOutFrame.stFrameInfo.nFrameNum);
+            }
+            else
+            {
+                printf("No data[0x%x]\n", nRet);
+            }
+            if(NULL != stOutFrame.pBufAddr)
+            {
+                nRet = MV_CC_FreeImageBuffer(m_hWnd, &stOutFrame);
+                if(nRet != MV_OK)
+                {
+                    printf("Free Image Buffer fail! nRet [0x%x]\n", nRet);
+                }
+            }
+
+
+
         //        cap->read(frame);
         //        if(frame.data){
         ////            std::cout << frame.data << std::endl;
@@ -34,6 +145,8 @@ void ObjectCamVideo::streamerThread()
 
     }
 }
+
+
 
 QStringList ObjectCamVideo::searchConnectedCameras(){
     memset(&m_stDevList, 0, sizeof(MV_CC_DEVICE_INFO_LIST));

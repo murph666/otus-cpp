@@ -7,21 +7,21 @@ Window {
     id: mainWindow
     visible: true
     title: "Otus C++ CV project"
-    width: 600
-    height: 400
-
     color: "#C2A83E"
+    width: 1024
+    height: 600
     //    flags: Qt.FramelessWindowHint
 
     //Объявляем сигналы
     signal btnSearchClicked()
     signal btnConnectClicked()
+    signal btnGrabbingClicked()
     //    signal textFieldEditingFinished(msg: string)
     signal cboxAccepted(count: int)
 
     //Расположить Окно по центру
-//    screen: Qt.application.screens[2]
-//    visibility: "FullScreen"
+    screen: Qt.application.screens[2]
+    visibility: "FullScreen"
     Component.onCompleted: {
         mainWindow.x = Screen.virtualX + (Screen.width - this.width) / 2
         mainWindow.y = Screen.virtualY + (Screen.height - this.height) / 2
@@ -40,7 +40,7 @@ Window {
         property bool counter: false
         anchors.fill: parent
         anchors.margins: 10
-        anchors.topMargin: 60
+
 
         Image{
             id: opencvImage
@@ -69,7 +69,6 @@ Window {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
             anchors.horizontalCenter: parent.horizontalCenter
-
             Button {
                 id: buttonCameraSearch
                 text: "Search"
@@ -92,7 +91,7 @@ Window {
 
             ComboBox {
                 id: comboConnectedDevice
-                width: parent.width - 240
+                width: parent.width - 360
                 height: parent.height
                 Layout.alignment: Qt.AlignHCenter
                 Layout.fillWidth: true
@@ -123,9 +122,9 @@ Window {
                 width: 100
                 height: 50
                 contentItem: Text {
-                    text: parent.text
                     font: parent.font
                     color: "#F1F7ED"
+                    text: parent.text
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                 }
@@ -136,21 +135,37 @@ Window {
                 }
                 onClicked: mainWindow.btnConnectClicked()
             }
+
+            Button {
+                id: buttonCameraGrabbing
+                text: "Start"
+                width: 100
+                height: 50
+                contentItem: Text {
+                    font: parent.font
+                    color: "#F1F7ED"
+                    text: parent.text
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
+                background: Rectangle {
+                    radius: 5
+                    color: parent.down ? "#7CA982" :
+                                         (parent.hovered ? "#243E36" : "#7CA982")
+                }
+                onClicked: mainWindow.btnGrabbingClicked()
+            }
+
+
+
         }
     }
-    //    Connections{
-    //        target: liveImageProvider
 
-    //        function onImageChanged()
-    //        {
-    //            opencvImage.reload()
-    //        }
-    //    }
 }
 
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:16}
+    D{i:0;formeditorZoom:0.75}
 }
 ##^##*/

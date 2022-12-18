@@ -27,6 +27,7 @@ public:
 private slots:
     void on_btnSearchClicked();
     void on_btnConnectClicked();
+    void on_btnGrabbingClicked();
     void on_cboxAccepted(int count);
 
 private:
@@ -34,6 +35,8 @@ private:
     ObjectCamVideo          *camera;
     OpencvImageProvider     *liveImageProvider;
     ComboBoxModel           *listOfCameras;
+
+    int                     currentIndexOfComboBox = 0;
 
     //для всплывающего окна с ошибкой/предупреждением
     void ShowErrorMsg(QString csMessage, int nErrorNum);
