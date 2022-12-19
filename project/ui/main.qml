@@ -20,8 +20,8 @@ Window {
     signal cboxAccepted(count: int)
 
     //Расположить Окно по центру
-    screen: Qt.application.screens[2]
-    visibility: "FullScreen"
+//    screen: Qt.application.screens[2]
+//    visibility: "FullScreen"
     Component.onCompleted: {
         mainWindow.x = Screen.virtualX + (Screen.width - this.width) / 2
         mainWindow.y = Screen.virtualY + (Screen.height - this.height) / 2

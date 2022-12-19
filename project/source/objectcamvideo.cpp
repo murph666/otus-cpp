@@ -10,32 +10,10 @@ ObjectCamVideo::ObjectCamVideo(QObject *parent)
     QObject::connect(threadStreamer, SIGNAL(started()), this, SLOT(streamerThread()));
 }
 
-void __stdcall ObjectCamVideo::ImageCallBack(unsigned char *pData, MV_FRAME_OUT_INFO_EX *pFrameInfo){
-    this -> ImageCallBackInner(pData, pFrameInfo);
-}
 
-void ObjectCamVideo::ImageCallBackInner(unsigned char *pData, MV_FRAME_OUT_INFO_EX *pFrameInfo)
-{
-    MV_DISPLAY_FRAME_INFO stDisplayInfo;
-    memset(&stDisplayInfo, 0, sizeof(MV_DISPLAY_FRAME_INFO));
-
-    stDisplayInfo.hWnd = m_hWnd;
-    stDisplayInfo.pData = pData;
-    stDisplayInfo.nDataLen = pFrameInfo->nFrameLen;
-    stDisplayInfo.nWidth = pFrameInfo->nWidth;
-    stDisplayInfo.nHeight = pFrameInfo->nHeight;
-    stDisplayInfo.enPixelType = pFrameInfo->enPixelType;
-    m_pcMyCamera->DisplayOneFrame(&stDisplayInfo);
-}
 
 void ObjectCamVideo::openCamera(int *cameraNumber){
     int nIndex = *cameraNumber;
-    if (NULL == m_stDevList.pDeviceInfo[nIndex])
-    {
-        //        ShowErrorMsg("Device does not exist", 0);
-        std::cout << "Device does not exist" << std::endl;
-        return;
-    }
 
     int nRet = m_pcMyCamera->Open(m_stDevList.pDeviceInfo[nIndex]);
     if (MV_OK != nRet)
@@ -77,7 +55,6 @@ void ObjectCamVideo::openCamera(int *cameraNumber){
 }
 
 void ObjectCamVideo::startGrabbing(){
-    //    m_pcMyCamera -> RegisterImageCallBack(ImageCallBack, this);
     int nRet = m_pcMyCamera->StartGrabbing();
     if (MV_OK != nRet)
     {
@@ -85,12 +62,16 @@ void ObjectCamVideo::startGrabbing(){
         //            ShowErrorMsg("Start grabbing fail", nRet);
         return;
     }
-    m_bGrabbing = true;
-    this->threadStreamer->start();
+    else{
+        std::cout << "Start grabbing succes" << std::endl;
+        m_bGrabbing = true;
+        this->threadStreamer->start();
+    }
+
 }
 
 void ObjectCamVideo::stopGrabbing(){
-    this -> threadStreamer->exit();
+
     int nRet = m_pcMyCamera->StopGrabbing();
     if (MV_OK != nRet)
     {
@@ -98,27 +79,52 @@ void ObjectCamVideo::stopGrabbing(){
         //        ShowErrorMsg("Stop grabbing fail", nRet);
         return;
     }
-    m_bGrabbing = false;
+    else{
+        std::cout << "Stop grabbing succes" << std::endl;
+        m_bGrabbing = false;
+        this -> threadStreamer->exit();
+    }
 
 }
 
 void ObjectCamVideo::streamerThread()
 {
-    int nRet = MV_OK;
+    if (!m_bGrabbing){
+        int nRet = MV_OK;
 
-    MV_FRAME_OUT stOutFrame = {0};
-    memset(&stOutFrame, 0, sizeof(MV_FRAME_OUT));
-    while(1)
+        MVCC_INTVALUE stParam;
+        memset(&stParam, 0, sizeof(MVCC_INTVALUE));
+        nRet = MV_CC_GetIntValue(m_hWnd, "PayloadSize", &stParam);
+        if (MV_OK != nRet)
         {
-            nRet = MV_CC_GetImageBuffer(m_hWnd, &stOutFrame, 1000);
+            printf("Get PayloadSize fail! nRet [0x%x]\n", nRet);
+            return;
+        }
+
+        MV_FRAME_OUT stOutFrame = {0};
+        memset(&stOutFrame, 0, sizeof(MV_FRAME_OUT));
+
+        MV_FRAME_OUT_INFO_EX stImageInfo = {0};
+        memset(&stImageInfo, 0, sizeof(MV_FRAME_OUT_INFO_EX));
+        unsigned char * pData = (unsigned char *)malloc(sizeof(unsigned char) * stParam.nCurValue);
+        if (NULL == pData)
+        {
+            return ;
+        }
+        unsigned int nDataSize = stParam.nCurValue;
+
+        while(1)
+        {
+            nRet = MV_CC_GetOneFrameTimeout(m_hWnd, pData, nDataSize, &stImageInfo, 1000);
             if (nRet == MV_OK)
             {
-                printf("Get One Frame: Width[%d], Height[%d], nFrameNum[%d]\n",
-                    stOutFrame.stFrameInfo.nWidth, stOutFrame.stFrameInfo.nHeight, stOutFrame.stFrameInfo.nFrameNum);
+                frame = QImage(pData,stImageInfo.nWidth, stImageInfo.nHeight,QImage::Format_RGB888).rgbSwapped();
+                printf("GetOneFrame, Width[%d], Height[%d], nFrameNum[%d]\n",
+                       stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
+                emit emitImage(frame);
             }
-            else
-            {
-                printf("No data[0x%x]\n", nRet);
+            else{
+                printf("No data[%x]\n", nRet);
             }
             if(NULL != stOutFrame.pBufAddr)
             {
@@ -128,21 +134,10 @@ void ObjectCamVideo::streamerThread()
                     printf("Free Image Buffer fail! nRet [0x%x]\n", nRet);
                 }
             }
+        }
 
-
-
-        //        cap->read(frame);
-        //        if(frame.data){
-        ////            std::cout << frame.data << std::endl;
-        //            QImage img = QImage(frame.data,frame.cols,frame.rows,QImage::Format_RGB888).rgbSwapped();
-        //            emit emitImage(img);
-        //        }
-        //        if(QThread::currentThread()->isInterruptionRequested())
-        //        {
-        //            cap->release();
-        //            return;
-        //        }
-
+        delete[] (pData);
+        return;
     }
 }
 
