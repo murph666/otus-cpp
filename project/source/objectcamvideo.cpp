@@ -52,6 +52,25 @@ void ObjectCamVideo::openCamera(int *cameraNumber){
     m_pcMyCamera->SetEnumValue("AcquisitionMode", MV_ACQ_MODE_CONTINUOUS);
     m_pcMyCamera->SetEnumValue("TriggerMode", MV_TRIGGER_MODE_OFF);
 
+    MVCC_INTVALUE_EX stParam;
+    memset(&stParam, 0, sizeof(MVCC_INTVALUE_EX));
+    nRet = m_pcMyCamera -> GetIntValue("PayloadSize", &stParam);
+    std::cout <<"streamerThread 1"<<std::endl;
+    if (MV_OK != nRet)
+    {
+        std::cout <<"Get PayloadSize fail"<<std::endl;
+        //            printf("Get PayloadSize fail! nRet [0x%x]\n", nRet);
+        return;
+    }
+    else {std::cout <<"Get PayloadSize succes"<<std::endl;}
+    long int nDataSize = stParam.nCurValue;
+    unsigned char* ptr = &pData;
+    ptr = new unsigned char[nDataSize];
+    if (NULL == ptr)
+    {
+        return ;
+    }
+    delete[] ptr;
 }
 
 void ObjectCamVideo::startGrabbing(){
@@ -87,58 +106,51 @@ void ObjectCamVideo::stopGrabbing(){
 
 }
 
+
 void ObjectCamVideo::streamerThread()
 {
-    if (!m_bGrabbing){
-        int nRet = MV_OK;
+    std::cout <<"streamerThread 0"<<std::endl;
 
-        MVCC_INTVALUE stParam;
-        memset(&stParam, 0, sizeof(MVCC_INTVALUE));
-        nRet = MV_CC_GetIntValue(m_hWnd, "PayloadSize", &stParam);
-        if (MV_OK != nRet)
-        {
-            printf("Get PayloadSize fail! nRet [0x%x]\n", nRet);
-            return;
-        }
+    int nRet = MV_OK;
+    MV_FRAME_OUT stImageInfo;
+    memset(&stImageInfo, 0, sizeof(MV_FRAME_OUT));
+    MV_FRAME_OUT_INFO_EX *stImageInfoEx = &stImageInfo.stFrameInfo;
 
-        MV_FRAME_OUT stOutFrame = {0};
-        memset(&stOutFrame, 0, sizeof(MV_FRAME_OUT));
-
-        MV_FRAME_OUT_INFO_EX stImageInfo = {0};
-        memset(&stImageInfo, 0, sizeof(MV_FRAME_OUT_INFO_EX));
-        unsigned char * pData = (unsigned char *)malloc(sizeof(unsigned char) * stParam.nCurValue);
-        if (NULL == pData)
-        {
-            return ;
-        }
-        unsigned int nDataSize = stParam.nCurValue;
-
-        while(1)
-        {
-            nRet = MV_CC_GetOneFrameTimeout(m_hWnd, pData, nDataSize, &stImageInfo, 1000);
+    std::cout <<"streamerThread 3"<<std::endl;
+    bool flag = true;
+    while(1)
+    {
+        if (m_bGrabbing){
+            auto start = std::chrono::high_resolution_clock::now();
+            nRet = m_pcMyCamera ->GetImageBuffer(&stImageInfo, 10);
             if (nRet == MV_OK)
             {
-                frame = QImage(pData,stImageInfo.nWidth, stImageInfo.nHeight,QImage::Format_RGB888).rgbSwapped();
-                printf("GetOneFrame, Width[%d], Height[%d], nFrameNum[%d]\n",
-                       stImageInfo.nWidth, stImageInfo.nHeight, stImageInfo.nFrameNum);
+                frame = QImage(stImageInfo.pBufAddr, stImageInfoEx->nWidth, stImageInfoEx->nHeight,QImage::Format::Format_Grayscale8);
+
                 emit emitImage(frame);
+                auto stop = std::chrono::high_resolution_clock::now();
+                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
+                std::cout << "Time taken by function: " << duration.count() << " microseconds" << std::endl;
             }
             else{
-                printf("No data[%x]\n", nRet);
-            }
-            if(NULL != stOutFrame.pBufAddr)
-            {
-                nRet = MV_CC_FreeImageBuffer(m_hWnd, &stOutFrame);
-                if(nRet != MV_OK)
-                {
-                    printf("Free Image Buffer fail! nRet [0x%x]\n", nRet);
+                if (flag){
+                    printf("No data[%x]\n", nRet);
+                    flag = false;
                 }
             }
-        }
+            if(NULL != stImageInfo.pBufAddr)
+            {
+                nRet = m_pcMyCamera ->FreeImageBuffer(&stImageInfo);
+                if(nRet != MV_OK)
+                {
+                    std::cout << "Free Image Buffer fail!" << nRet << std::endl;
+                }
+//                else {std::cout << "Free Image Buffer succes!" << nRet << std::endl;}
+            }
 
-        delete[] (pData);
-        return;
+        }
     }
+    return;
 }
 
 

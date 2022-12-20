@@ -19,6 +19,7 @@ public:
     void                    startGrabbing();
     void                    stopGrabbing();
 
+
     QImage                  frame;
     QStringList             searchConnectedCameras();
 
@@ -26,10 +27,11 @@ public:
 
 private:
     QThread                 *threadStreamer = new QThread();
-
+    unsigned char           pData;
     void                    *m_hWnd;
     MV_CC_DEVICE_INFO_LIST  m_stDevList;
     CMvCamera               *m_pcMyCamera = new CMvCamera();
+
 
 private slots:
     void streamerThread();
