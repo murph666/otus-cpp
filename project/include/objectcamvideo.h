@@ -20,7 +20,7 @@ public:
     void                    stopGrabbing();
 
 
-    QImage                  frame;
+    MV_FRAME_OUT            frame;
     QStringList             searchConnectedCameras();
 
     bool                    m_bGrabbing = false;
@@ -29,6 +29,7 @@ private:
     QThread                 *threadStreamer = new QThread();
     unsigned char           pData;
     void                    *m_hWnd;
+
     MV_CC_DEVICE_INFO_LIST  m_stDevList;
     CMvCamera               *m_pcMyCamera = new CMvCamera();
 

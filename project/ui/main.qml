@@ -48,7 +48,7 @@ Window {
 
             anchors.fill: parent
             anchors.margins: 10
-            anchors.bottomMargin: buttonCameraSearch.height + 10
+            anchors.bottomMargin: row.height * 2 + 40
             visible: true
             fillMode: Image.PreserveAspectFit
             asynchronous: false
@@ -67,7 +67,8 @@ Window {
             width: parent.width - 20
             spacing: 20
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 10
+
+            anchors.bottomMargin: row.height + 20
             anchors.horizontalCenter: parent.horizontalCenter
             Button {
                 id: buttonCameraSearch
@@ -159,13 +160,90 @@ Window {
 
 
         }
-    }
 
+        Row {
+            id: row1
+            width: parent.width - 20
+            height: row.height
+//            spacing: 20
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 10
+            anchors.horizontalCenter: parent.horizontalCenter
+
+            RangeSlider {
+                id: control
+                first.value: 0.25
+                second.value: 0.75
+                anchors.verticalCenter: parent.verticalCenter
+
+                background: Rectangle {
+                    x: control.leftPadding
+                    y: control.topPadding + control.availableHeight / 2 - height / 2
+                    implicitWidth: 200
+                    implicitHeight: 4
+                    width: control.availableWidth
+                    height: implicitHeight
+                    radius: 2
+                    color: "#F1F7ED"
+
+                    Rectangle {
+                        x: control.first.visualPosition * parent.width
+                        width: control.second.visualPosition * parent.width - x
+                        height: parent.height
+                        color: "#7CA982"
+                        radius: 2
+                    }
+                }
+
+//                first.handle: Rectangle {
+////                    x: control.leftPadding + first.visualPosition * (control.availableWidth - width)
+////                    y: control.topPadding + control.availableHeight / 2 - height / 2
+//                    implicitWidth: 26
+//                    implicitHeight: 26
+//                    radius: 13
+//                    color: first.pressed ? "#f0f0f0" : "#f6f6f6"
+//                    border.color: "#bdbebf"
+//                }
+
+//                second.handle: Rectangle {
+//                    x: control.leftPadding + second.visualPosition * (control.availableWidth - width)
+//                    y: control.topPadding + control.availableHeight / 2 - height / 2
+//                    implicitWidth: 26
+//                    implicitHeight: 26
+//                    radius: 13
+//                    color: second.pressed ? "#f0f0f0" : "#f6f6f6"
+//                    border.color: "#bdbebf"
+//                }
+
+                first.handle: Rectangle {
+                        x: control.leftPadding + control.first.visualPosition * (control.availableWidth - width)
+                        y: control.topPadding + control.availableHeight / 2 - height / 2
+                        implicitWidth: 26
+                        implicitHeight: 26
+                        radius: 13
+                        color: control.first.pressed ? "#F1F7ED" : "#f6f6f6"
+                        border.color: "#bdbebf"
+                    }
+
+                    second.handle: Rectangle {
+                        x: control.leftPadding + control.second.visualPosition * (control.availableWidth - width)
+                        y: control.topPadding + control.availableHeight / 2 - height / 2
+                        implicitWidth: 26
+                        implicitHeight: 26
+                        radius: 13
+                        color: control.second.pressed ? "#F1F7ED" : "#f6f6f6"
+                        border.color: "#bdbebf"
+                    }
+            }
+
+
+        }
+    }
 }
 
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}
+    D{i:0;formeditorZoom:3}
 }
 ##^##*/

@@ -52,25 +52,18 @@ void ObjectCamVideo::openCamera(int *cameraNumber){
     m_pcMyCamera->SetEnumValue("AcquisitionMode", MV_ACQ_MODE_CONTINUOUS);
     m_pcMyCamera->SetEnumValue("TriggerMode", MV_TRIGGER_MODE_OFF);
 
-    MVCC_INTVALUE_EX stParam;
-    memset(&stParam, 0, sizeof(MVCC_INTVALUE_EX));
-    nRet = m_pcMyCamera -> GetIntValue("PayloadSize", &stParam);
-    std::cout <<"streamerThread 1"<<std::endl;
-    if (MV_OK != nRet)
-    {
-        std::cout <<"Get PayloadSize fail"<<std::endl;
-        //            printf("Get PayloadSize fail! nRet [0x%x]\n", nRet);
-        return;
-    }
-    else {std::cout <<"Get PayloadSize succes"<<std::endl;}
-    long int nDataSize = stParam.nCurValue;
-    unsigned char* ptr = &pData;
-    ptr = new unsigned char[nDataSize];
-    if (NULL == ptr)
-    {
-        return ;
-    }
-    delete[] ptr;
+    //    MVCC_INTVALUE_EX stParam;
+    //    memset(&stParam, 0, sizeof(MVCC_INTVALUE_EX));
+    //    nRet = m_pcMyCamera -> GetIntValue("PayloadSize", &stParam);
+    //    std::cout <<"streamerThread 1"<<std::endl;
+    //    if (MV_OK != nRet)
+    //    {
+    //        std::cout <<"Get PayloadSize fail"<<std::endl;
+    //        //            printf("Get PayloadSize fail! nRet [0x%x]\n", nRet);
+    //        return;
+    //    }
+    //    else {std::cout <<"Get PayloadSize succes"<<std::endl;}
+
 }
 
 void ObjectCamVideo::startGrabbing(){
@@ -114,40 +107,36 @@ void ObjectCamVideo::streamerThread()
     int nRet = MV_OK;
     MV_FRAME_OUT stImageInfo;
     memset(&stImageInfo, 0, sizeof(MV_FRAME_OUT));
-    MV_FRAME_OUT_INFO_EX *stImageInfoEx = &stImageInfo.stFrameInfo;
+    //    MV_FRAME_OUT_INFO_EX *stImageInfoEx = &stImageInfo.stFrameInfo;
 
     std::cout <<"streamerThread 3"<<std::endl;
-    bool flag = true;
+
     while(1)
     {
         if (m_bGrabbing){
             auto start = std::chrono::high_resolution_clock::now();
+
             nRet = m_pcMyCamera ->GetImageBuffer(&stImageInfo, 10);
             if (nRet == MV_OK)
             {
-                frame = QImage(stImageInfo.pBufAddr, stImageInfoEx->nWidth, stImageInfoEx->nHeight,QImage::Format::Format_Grayscale8);
+                std::memcpy(frame.pBufAddr, stImageInfo.pBufAddr, (size_t) sizeof(&frame.pBufAddr));
+                frame.stFrameInfo = frame.stFrameInfo;
 
-                emit emitImage(frame);
+                QImage emitFrame = QImage(frame.pBufAddr, frame.stFrameInfo.nWidth, frame.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);
+
+                emit emitImage(emitFrame);
                 auto stop = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-                std::cout << "Time taken by function: " << duration.count() << " microseconds" << std::endl;
-            }
-            else{
-                if (flag){
-                    printf("No data[%x]\n", nRet);
-                    flag = false;
-                }
-            }
-            if(NULL != stImageInfo.pBufAddr)
-            {
-                nRet = m_pcMyCamera ->FreeImageBuffer(&stImageInfo);
-                if(nRet != MV_OK)
+                std::cout << "Time taken by GetImageBuffer: " <<(float) duration.count() / 1000000 << " seconds" << std::endl;
+                if(NULL != stImageInfo.pBufAddr)
                 {
-                    std::cout << "Free Image Buffer fail!" << nRet << std::endl;
+                    nRet = m_pcMyCamera ->FreeImageBuffer(&stImageInfo);
+                    if(nRet != MV_OK)
+                    {
+                        std::cout << "Free Image Buffer fail!" << nRet << std::endl;
+                    }
                 }
-//                else {std::cout << "Free Image Buffer succes!" << nRet << std::endl;}
             }
-
         }
     }
     return;
