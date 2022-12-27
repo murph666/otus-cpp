@@ -32,6 +32,12 @@ void MainWindow::ConnectSignals(){
     QObject::connect(item, SIGNAL(cboxAccepted(int)),
                      this, SLOT(on_cboxAccepted(int)));
 
+    QObject::connect(item, SIGNAL(firstHandleOfThresholdSliderChanged(int)),
+                     this, SLOT(on_firstHandleOfThresholdSliderChanged(int)));
+
+    QObject::connect(item, SIGNAL(secondHandleOfThresholdSliderChanged(int)),
+                     this, SLOT(on_secondHandleOfThresholdSliderChanged(int)));
+
 
 }
 
@@ -57,7 +63,15 @@ void MainWindow::on_btnGrabbingClicked(){
 }
 
 void MainWindow::on_cboxAccepted(int count){
-    std::cout << "on_cboxAccepted" << std::endl;
     currentIndexOfComboBox = count;
+}
+
+void MainWindow::on_firstHandleOfThresholdSliderChanged(int value){
+    std::cout << "on_firstHandleOfThresholdSliderChanged:"<< value << std::endl;
+    camera -> lowLvlOfThreshold = value;
+}
+void MainWindow::on_secondHandleOfThresholdSliderChanged(int value){
+    std::cout << "on_secondHandleOfThresholdSliderChanged:"<< value << std::endl;
+    camera -> highLvlOfThreshold = value;
 }
 

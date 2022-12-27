@@ -18,10 +18,12 @@ Window {
     signal btnGrabbingClicked()
     //    signal textFieldEditingFinished(msg: string)
     signal cboxAccepted(count: int)
+    signal firstHandleOfThresholdSliderChanged(value: int)
+    signal secondHandleOfThresholdSliderChanged(value: int)
 
     //Расположить Окно по центру
-//    screen: Qt.application.screens[2]
-//    visibility: "FullScreen"
+    //    screen: Qt.application.screens[2]
+    //    visibility: "FullScreen"
     Component.onCompleted: {
         mainWindow.x = Screen.virtualX + (Screen.width - this.width) / 2
         mainWindow.y = Screen.virtualY + (Screen.height - this.height) / 2
@@ -165,24 +167,74 @@ Window {
             id: row1
             width: parent.width - 20
             height: row.height
-//            spacing: 20
+            spacing: 20
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 10
             anchors.horizontalCenter: parent.horizontalCenter
 
+            Row {
+                id: doubleLabelSwitch
+                anchors.verticalCenter: parent.verticalCenter
+//                width: 200
+                height: row1.height
+
+                Label{
+                    id:labelOriginal
+                    text: qsTr("ASDASD")
+                    color: "#7CA982"
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pointSize: 16
+
+                }
+
+                Switch {
+                    id: switchThreshold
+                    anchors.verticalCenter: parent.verticalCenter
+//                    width: 100
+                    indicator: Rectangle {
+                        implicitWidth: 48
+                        implicitHeight: 26
+                        x: switchThreshold.leftPadding
+                        y: parent.height / 2 - height / 2
+                        radius: 13
+                        color: switchThreshold.checked ? "#7CA982" : "#ffffff"
+                        border.color: switchThreshold.checked ? "#7CA982" : "#cccccc"
+
+                        Rectangle {
+                            x: switchThreshold.checked ? parent.width - width : 0
+                            width: 26
+                            height: 26
+                            radius: 13
+                            color: switchThreshold.down ? "#cccccc" : "#ffffff"
+                            border.color: switchThreshold.checked ? "#7CA982": "#999999"
+                        }
+                    }
+                }
+
+                Label{
+                    id:labelThresh
+                    text: qsTr("ASDQWE")
+                    anchors.verticalCenter: parent.verticalCenter
+                    font.pointSize: 16
+color: "#7CA982"
+                }
+
+            }
+
             RangeSlider {
                 id: control
-                first.value: 0.25
-                second.value: 0.75
+                width: comboConnectedDevice.width
+                from: 0
+                to: 255
+                first.value: 25
+                second.value: 235
                 anchors.verticalCenter: parent.verticalCenter
 
                 background: Rectangle {
                     x: control.leftPadding
                     y: control.topPadding + control.availableHeight / 2 - height / 2
-                    implicitWidth: 200
-                    implicitHeight: 4
                     width: control.availableWidth
-                    height: implicitHeight
+                    height: 4
                     radius: 2
                     color: "#F1F7ED"
 
@@ -195,48 +247,37 @@ Window {
                     }
                 }
 
-//                first.handle: Rectangle {
-////                    x: control.leftPadding + first.visualPosition * (control.availableWidth - width)
-////                    y: control.topPadding + control.availableHeight / 2 - height / 2
-//                    implicitWidth: 26
-//                    implicitHeight: 26
-//                    radius: 13
-//                    color: first.pressed ? "#f0f0f0" : "#f6f6f6"
-//                    border.color: "#bdbebf"
-//                }
-
-//                second.handle: Rectangle {
-//                    x: control.leftPadding + second.visualPosition * (control.availableWidth - width)
-//                    y: control.topPadding + control.availableHeight / 2 - height / 2
-//                    implicitWidth: 26
-//                    implicitHeight: 26
-//                    radius: 13
-//                    color: second.pressed ? "#f0f0f0" : "#f6f6f6"
-//                    border.color: "#bdbebf"
-//                }
-
                 first.handle: Rectangle {
-                        x: control.leftPadding + control.first.visualPosition * (control.availableWidth - width)
-                        y: control.topPadding + control.availableHeight / 2 - height / 2
-                        implicitWidth: 26
-                        implicitHeight: 26
-                        radius: 13
-                        color: control.first.pressed ? "#F1F7ED" : "#f6f6f6"
-                        border.color: "#bdbebf"
-                    }
+                    x: control.leftPadding + control.first.visualPosition * (control.availableWidth - width)
+                    y: control.topPadding + control.availableHeight / 2 - height / 2
+                    implicitWidth: 26
+                    implicitHeight: 26
+                    radius: 13
+                    color: control.first.pressed ? "#F1F7ED" : "#f6f6f6"
+                    border.color: "#bdbebf"
 
-                    second.handle: Rectangle {
-                        x: control.leftPadding + control.second.visualPosition * (control.availableWidth - width)
-                        y: control.topPadding + control.availableHeight / 2 - height / 2
-                        implicitWidth: 26
-                        implicitHeight: 26
-                        radius: 13
-                        color: control.second.pressed ? "#F1F7ED" : "#f6f6f6"
-                        border.color: "#bdbebf"
-                    }
+                }
+
+                second.handle: Rectangle {
+                    x: control.leftPadding + control.second.visualPosition * (control.availableWidth - width)
+                    y: control.topPadding + control.availableHeight / 2 - height / 2
+                    implicitWidth: 26
+                    implicitHeight: 26
+                    radius: 13
+                    color: control.second.pressed ? "#F1F7ED" : "#f6f6f6"
+                    border.color: "#bdbebf"
+                }
+
+                first.onValueChanged: mainWindow.firstHandleOfThresholdSliderChanged(first.value)
+                second.onValueChanged: mainWindow.secondHandleOfThresholdSliderChanged(second.value)
             }
-
-
+            CheckBox {
+                id: checkBox
+                text: qsTr("Contour")
+                anchors.verticalCenter: parent.verticalCenter
+                font.pointSize: 16
+color: "#7CA982"
+            }
         }
     }
 }
@@ -244,6 +285,6 @@ Window {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:3}
+    D{i:0;formeditorZoom:1.1}
 }
 ##^##*/

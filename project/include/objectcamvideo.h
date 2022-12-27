@@ -24,14 +24,19 @@ public:
     QStringList             searchConnectedCameras();
 
     bool                    m_bGrabbing = false;
+    int                     lowLvlOfThreshold = 0;
+    int                     highLvlOfThreshold = 255;
 
 private:
     QThread                 *threadStreamer = new QThread();
     unsigned char           pData;
     void                    *m_hWnd;
+    void                    threshold();
 
     MV_CC_DEVICE_INFO_LIST  m_stDevList;
     CMvCamera               *m_pcMyCamera = new CMvCamera();
+
+
 
 
 private slots:

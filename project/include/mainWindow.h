@@ -29,6 +29,8 @@ private slots:
     void on_btnConnectClicked();
     void on_btnGrabbingClicked();
     void on_cboxAccepted(int count);
+    void on_firstHandleOfThresholdSliderChanged(int value);
+    void on_secondHandleOfThresholdSliderChanged(int value);
 
 private:
     QQmlApplicationEngine   *engine;
