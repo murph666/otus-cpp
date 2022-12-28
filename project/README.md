@@ -21,7 +21,10 @@ find_package(OpenCV REQUIRED)
 ```
 #include <opencv2/<<module>>.hpp>
 ```
+## Оборудование 
+ [MV-CS016-10GM](https://www.hikrobotics.com/en/machinevision/productdetail?id=4994&pageNumber=1&pageSize=50)
+
 ## Реализация работы программы
-![Альтернативный текст](/img/0.png "Подсказка")
-![Альтернативный текст](/img/1.png "Подсказка")
-![Альтернативный текст](/img/2.png "Подсказка")
+![Альтернативный текст](img/0.png "Подсказка")
+![Альтернативный текст](img/1.png "Подсказка")
+![Альтернативный текст](img/2.png "Подсказка")
