@@ -273,19 +273,19 @@ Window {
                 first.onValueChanged: mainWindow.firstHandleOfThresholdSliderChanged(first.value)
                 second.onValueChanged: mainWindow.secondHandleOfThresholdSliderChanged(second.value)
             }
-            CheckBox {
-                id: checkBox
-                text: qsTr("Contour")
-                anchors.verticalCenter: parent.verticalCenter
-                contentItem: Text {
-                    font: parent.font
+//            CheckBox {
+//                id: checkBox
+//                text: qsTr("Contour")
+//                anchors.verticalCenter: parent.verticalCenter
+//                contentItem: Text {
+//                    font: parent.font
 
-                    color: "#7CA982"
-                    text: parent.text
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
+//                    color: "#7CA982"
+//                    text: parent.text
+//                    horizontalAlignment: Text.AlignHCenter
+//                    verticalAlignment: Text.AlignVCenter
+//                }
+//            }
         }
     }
 }
