@@ -1,6 +1,8 @@
 #include "objectcamvideo.h"
 #include "qregularexpression.h"
 #include <iostream>
+#include <algorithm>
+#include <iterator>
 #include <QDebug>
 
 ObjectCamVideo::ObjectCamVideo(QObject *parent)
@@ -108,25 +110,29 @@ void ObjectCamVideo::streamerThread()
     int nRet = MV_OK;
     MV_FRAME_OUT stImageInfo;
     memset(&stImageInfo, 0, sizeof(MV_FRAME_OUT));
+    QImage emitedFrame;
     while(1)
     {
         if (m_bGrabbing){
-
+            auto start = std::chrono::high_resolution_clock::now();
             nRet = m_pcMyCamera ->GetImageBuffer(&stImageInfo, 10);
             if (nRet == MV_OK)
             {
-                std::memcpy(frame.pBufAddr, stImageInfo.pBufAddr, (size_t) sizeof(stImageInfo.pBufAddr));
-                frame.pBufAddr = stImageInfo.pBufAddr;
+                frame.pBufAddr = (unsigned char*) std::malloc(sizeof(unsigned char) * stImageInfo.stFrameInfo.nFrameLen);
+                std::memcpy(frame.pBufAddr, stImageInfo.pBufAddr, (size_t) sizeof(unsigned char) * stImageInfo.stFrameInfo.nFrameLen);
                 frame.stFrameInfo = stImageInfo.stFrameInfo;
-                auto start = std::chrono::high_resolution_clock::now();
+
                 threshold();
+                if (m_bView == 1){
+                    emitedFrame = QImage(frame.pBufAddr, frame.stFrameInfo.nWidth, frame.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);
+                }
+                else {
+                    emitedFrame = QImage(stImageInfo.pBufAddr,stImageInfo.stFrameInfo.nWidth,stImageInfo.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);}
+
+                emit emitImage(emitedFrame);
                 auto stop = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
                 std::cout << "Time taken by GetImageBuffer: " <<(float) duration.count() / 1000000 << " seconds" << std::endl;
-//                std::cout<<"The Length of the Array is : "<<std::strlen((char*)frame.pBufAddr)<< std::endl;
-                QImage emitFrame = QImage(frame.pBufAddr, frame.stFrameInfo.nWidth, frame.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);
-                //                QImage emitFrame = QImage(stImageInfo.pBufAddr,stImageInfo.stFrameInfo.nWidth,stImageInfo.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);
-                emit emitImage(emitFrame);
 
 
                 if(NULL != stImageInfo.pBufAddr)
@@ -145,10 +151,8 @@ void ObjectCamVideo::streamerThread()
 
 void ObjectCamVideo::threshold()
 {
-    for (auto pixel = 0; ; pixel++){
-        frame.pBufAddr[pixel] = (frame.pBufAddr[pixel] > lowLvlOfThreshold && frame.pBufAddr[pixel] < highLvlOfThreshold) ? 255 : 0;
-        if (pixel == frame.stFrameInfo.nFrameLen)
-            break;
+    for (auto pixel = 0; pixel <= frame.stFrameInfo.nFrameLen ; pixel++){
+        frame.pBufAddr[pixel] = (frame.pBufAddr[pixel] > m_lowLvlOfThreshold && frame.pBufAddr[pixel] < m_highLvlOfThreshold) ? 255 : 0;
     }
 }
 

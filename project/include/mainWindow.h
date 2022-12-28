@@ -28,6 +28,7 @@ private slots:
     void on_btnSearchClicked();
     void on_btnConnectClicked();
     void on_btnGrabbingClicked();
+    void on_swchViewToggled(bool);
     void on_cboxAccepted(int count);
     void on_firstHandleOfThresholdSliderChanged(int value);
     void on_secondHandleOfThresholdSliderChanged(int value);

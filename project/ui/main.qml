@@ -8,14 +8,15 @@ Window {
     visible: true
     title: "Otus C++ CV project"
     color: "#C2A83E"
-    width: 1024
-    height: 600
+    width: 600
+    height: 1024
     //    flags: Qt.FramelessWindowHint
 
     //Объявляем сигналы
     signal btnSearchClicked()
     signal btnConnectClicked()
     signal btnGrabbingClicked()
+    signal swchViewToggled(value: bool)
     //    signal textFieldEditingFinished(msg: string)
     signal cboxAccepted(count: int)
     signal firstHandleOfThresholdSliderChanged(value: int)
@@ -180,7 +181,7 @@ Window {
 
                 Label{
                     id:labelOriginal
-                    text: qsTr("ASDASD")
+                    text: qsTr("Original")
                     color: "#7CA982"
                     anchors.verticalCenter: parent.verticalCenter
                     font.pointSize: 16
@@ -188,35 +189,36 @@ Window {
                 }
 
                 Switch {
-                    id: switchThreshold
+                    id: switchView
                     anchors.verticalCenter: parent.verticalCenter
 //                    width: 100
                     indicator: Rectangle {
                         implicitWidth: 48
                         implicitHeight: 26
-                        x: switchThreshold.leftPadding
+                        x: switchView.leftPadding
                         y: parent.height / 2 - height / 2
                         radius: 13
-                        color: switchThreshold.checked ? "#7CA982" : "#ffffff"
-                        border.color: switchThreshold.checked ? "#7CA982" : "#cccccc"
+                        color: switchView.checked ? "#7CA982" : "#ffffff"
+                        border.color: switchView.checked ? "#7CA982" : "#cccccc"
 
                         Rectangle {
-                            x: switchThreshold.checked ? parent.width - width : 0
+                            x: switchView.checked ? parent.width - width : 0
                             width: 26
                             height: 26
                             radius: 13
-                            color: switchThreshold.down ? "#cccccc" : "#ffffff"
-                            border.color: switchThreshold.checked ? "#7CA982": "#999999"
+                            color: switchView.down ? "#cccccc" : "#ffffff"
+                            border.color: switchView.checked ? "#7CA982": "#999999"
                         }
                     }
+                    onToggled: mainWindow.swchViewToggled(this.checked)
                 }
 
                 Label{
                     id:labelThresh
-                    text: qsTr("ASDQWE")
+                    text: qsTr("Binary")
                     anchors.verticalCenter: parent.verticalCenter
                     font.pointSize: 16
-color: "#7CA982"
+                    color: "#7CA982"
                 }
 
             }
@@ -275,8 +277,14 @@ color: "#7CA982"
                 id: checkBox
                 text: qsTr("Contour")
                 anchors.verticalCenter: parent.verticalCenter
-                font.pointSize: 16
-color: "#7CA982"
+                contentItem: Text {
+                    font: parent.font
+
+                    color: "#7CA982"
+                    text: parent.text
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                }
             }
         }
     }

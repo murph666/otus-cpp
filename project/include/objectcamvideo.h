@@ -24,8 +24,9 @@ public:
     QStringList             searchConnectedCameras();
 
     bool                    m_bGrabbing = false;
-    int                     lowLvlOfThreshold = 0;
-    int                     highLvlOfThreshold = 255;
+    bool                    m_bView = false;
+    int                     m_lowLvlOfThreshold = 0;
+    int                     m_highLvlOfThreshold = 255;
 
 private:
     QThread                 *threadStreamer = new QThread();
