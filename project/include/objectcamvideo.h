@@ -9,6 +9,16 @@
 
 #include "MvCamera.h"
 
+
+typedef struct _FRAME_AS_ARRAY
+{
+    unsigned char*      pBufAddr;              ///< \~english  pointer of image
+    MV_FRAME_OUT_INFO_EX    stFrameInfo;     ///< \~english information of the specific image
+    std::vector<std::vector<int>> aFrame;
+
+    unsigned int        nRes[16];                ///< \~english reserved
+}FRAME_AS_ARRAY;
+
 class ObjectCamVideo : public QObject
 {
     Q_OBJECT
@@ -20,7 +30,7 @@ public:
     void                    stopGrabbing();
 
 
-    MV_FRAME_OUT            frame;
+    FRAME_AS_ARRAY            frame;
     QStringList             searchConnectedCameras();
 
     bool                    m_bGrabbing = false;
@@ -33,6 +43,7 @@ private:
     unsigned char           pData;
     void                    *m_hWnd;
     void                    threshold();
+    void                    imgBufToArray();
 
     MV_CC_DEVICE_INFO_LIST  m_stDevList;
     CMvCamera               *m_pcMyCamera = new CMvCamera();

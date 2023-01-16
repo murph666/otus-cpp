@@ -14,11 +14,20 @@ typedef char    bool;
 /// 设备类型定义     
 /// \~english
 /// Device Type Definition
-#define MV_UNKNOW_DEVICE        0x00000000          ///< \~chinese 未知设备类型，保留意义       \~english Unknown Device Type, Reserved 
+#define MV_UNKNOW_DEVICE        0x00000000          ///< \~chinese 未知设备类型，保留意义       \~english Unknown Device Type, Reserved
 #define MV_GIGE_DEVICE          0x00000001          ///< \~chinese GigE设备                     \~english GigE Device
 #define MV_1394_DEVICE          0x00000002          ///< \~chinese 1394-a/b 设备                \~english 1394-a/b Device
 #define MV_USB_DEVICE           0x00000004          ///< \~chinese USB 设备                     \~english USB Device
 #define MV_CAMERALINK_DEVICE    0x00000008          ///< \~chinese CamLink设备                  \~english CamLink Device
+
+//#define MV_UNKNOW_DEVICE                0x00000000                  ///< \~chinese 未知设备类型，保留意义       \~english Unknown Device Type, Reserved
+//#define MV_GIGE_DEVICE                  0x00000001                  ///< \~chinese GigE设备                     \~english GigE Device
+//#define MV_1394_DEVICE                  0x00000002                  ///< \~chinese 1394-a/b 设备                \~english 1394-a/b Device
+//#define MV_USB_DEVICE                   0x00000004                  ///< \~chinese USB 设备                     \~english USB Device
+//#define MV_CAMERALINK_DEVICE            0x00000008                  ///< \~chinese CameraLink设备               \~english CameraLink Device
+//#define MV_VIR_GIGE_DEVICE              0x00000010                  ///< \~chinese 虚拟GigE设备                 \~english Virtual GigE Device
+//#define MV_VIR_USB_DEVICE               0x00000020                  ///< \~chinese 虚拟USB设备                 \~english Virtual USB Device
+//#define MV_GENTL_GIGE_DEVICE            0x00000040                  ///< \~chinese 自研网卡下GigE设备          \~english GenTL GigE Device
 
 /// \~chinese GigE设备信息         \~english GigE device info
 typedef struct _MV_GIGE_DEVICE_INFO_

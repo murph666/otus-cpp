@@ -127,13 +127,13 @@ void ObjectCamVideo::streamerThread()
                     emitedFrame = QImage(frame.pBufAddr, frame.stFrameInfo.nWidth, frame.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);
                 }
                 else {
-                    emitedFrame = QImage(stImageInfo.pBufAddr,stImageInfo.stFrameInfo.nWidth,stImageInfo.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);}
+                    emitedFrame = QImage(stImageInfo.pBufAddr,stImageInfo.stFrameInfo.nWidth,stImageInfo.stFrameInfo.nHeight, QImage::Format::Format_Grayscale8);
+                }
 
                 emit emitImage(emitedFrame);
                 auto stop = std::chrono::high_resolution_clock::now();
                 auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
                 std::cout << "Time taken by GetImageBuffer: " <<(float) duration.count() / 1000000 << " seconds" << std::endl;
-
 
                 if(NULL != stImageInfo.pBufAddr)
                 {
@@ -154,6 +154,11 @@ void ObjectCamVideo::threshold()
     for (auto pixel = 0; pixel <= frame.stFrameInfo.nFrameLen ; pixel++){
         frame.pBufAddr[pixel] = (frame.pBufAddr[pixel] > m_lowLvlOfThreshold && frame.pBufAddr[pixel] < m_highLvlOfThreshold) ? 255 : 0;
     }
+}
+
+void ObjectCamVideo::imgBufToArray()
+{
+
 }
 
 QStringList ObjectCamVideo::searchConnectedCameras(){
