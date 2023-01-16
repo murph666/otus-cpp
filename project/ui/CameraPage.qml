@@ -34,8 +34,6 @@ Item {
                 Layout.minimumWidth: 50
                 //Layout.maximumWidth: 300
                 //Layout.minimumHeight: 150
-
-                Layout.preferredWidth: 100
                 Layout.preferredHeight: rowLayout.height
 
                 Image{
@@ -283,9 +281,10 @@ Item {
 
             }
             Rectangle {
-                color: 'plum'
+                id: rectangle
+                color: '#F1F7ED'
+                radius: 20
                 Layout.rightMargin: 20
-
                 Layout.alignment: Qt.AlignRight | Qt.AlignVCenter
                 Layout.fillWidth: true
                 //Layout.minimumWidth: 100
@@ -294,41 +293,103 @@ Item {
                 //Layout.maximumHeight: 150
                 Layout.preferredWidth: 100
                 Layout.preferredHeight: rowLayout.height - 2*itemLayout.radius
+
                 ColumnLayout {
                     id: columnLayout
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    spacing: 20
 
-                    Rectangle {
-                        id: asd
-                        color: "#dda0a0"
-                        Layout.rightMargin: 20
-                        Layout.preferredHeight: parent.height / 2
-                       }
-                    Rectangle {
-                        id: asdb2
-                        color: "#0f00c9"
-                        Layout.rightMargin: 20
-                        Layout.preferredHeight: parent.height / 2
-                       }
+                    ListView {
+                        id: listView
+                        height: listView.contentHeight
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.top: parent.top
+                        anchors.topMargin: 10
 
+                        anchors.leftMargin: 10
+                        anchors.rightMargin: 10
+                        spacing: 10
+                        interactive: false
+
+                        model: connectedDeviceModel1.comboList
+
+                        delegate: Item {
+                            x: 5
+                            width: 65
+                            height: 40
+                            Row {
+                                id: listViewRow
+                                height: 40
+
+                                Text {
+                                    text: "[" + number + "]"
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Rectangle {
+                                    width:  20
+                                    height: 20
+                                    radius: 10
+                                    color: colorCode
+                                    anchors.verticalCenter: parent.verticalCenter
+                                }
+
+                                Text {
+                                    text: name
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.bold: true
+                                }
+                                spacing: 10
+                            }
+                        }
+
+
+//                        model: ListModel {
+//                            ListElement {
+//                                number: 0
+//                                name: "Grey"
+//                                colorCode: "grey"
+//                            }
+
+//                            ListElement {
+//                                number: 1
+//                                name: "Red"
+//                                colorCode: "red"
+//                            }
+
+//                            ListElement {
+//                                name: "Blue"
+//                                colorCode: "blue"
+//                            }
+
+//                            ListElement {
+//                                name: "Green"
+//                                colorCode: "green"
+//                            }
+//                            ListElement {
+//                                name: "Green"
+//                                colorCode: "green"
+//                            }
+//                        }
+                    }
+
+//                    Rectangle {
+//                        id: span
+//                        color: "#7CA982"
+//                        Layout.alignment: Qt.AlignHCenter
+//                        Layout.preferredWidth: columnLayout.width - 100
+//                        Layout.preferredHeight: 7
+//                        radius: 5
+//                    }
                 }
-
-
-
-
             }
         }
-
-
-
-
-
-
-
     }
-
-
-
 }
+
 
 
 
@@ -336,6 +397,6 @@ Item {
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75}
+    D{i:0;formeditorZoom:0.66}
 }
 ##^##*/

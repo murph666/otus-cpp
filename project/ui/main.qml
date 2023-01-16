@@ -10,7 +10,7 @@ Window {
     color: "#C2A83E"
     width: 1920
     height: 1080
-    //    flags: Qt.FramelessWindowHint
+    flags: Qt.MSWindowsFixedSizeDialogHint
 
     //Объявляем сигналы
     signal btnSearchClicked()
@@ -38,13 +38,13 @@ Window {
         anchors.bottomMargin: tabBar.height
 
         currentIndex: tabBar.currentIndex
-
-        MainPage{
-
-        }
         CameraPage {
 
         }
+        MainPage{
+
+        }
+
         DrawPage {
         }
 
@@ -59,27 +59,27 @@ Window {
         contentHeight: 60
         contentWidth: parent.width
         currentIndex: swipeView.currentIndex
-
+        TabButton {
+            id: tabButtonConnection
+            text: "Cameras"
+            height: parent.height
+            background: Rectangle {
+                color: parent.active ? "#7CA982" :
+                                       (tabBar.currentIndex === 0 ? "#243E36" : "#7CA982")
+            }
+        }
         TabButton {
             id: tabButtonMain
             text: "Main"
             height: parent.height
             background: Rectangle {
                 color: parent.active ? "#7CA982" :
-                                       (tabBar.currentIndex === 0 ? "#243E36" : "#7CA982")
-            }
-
-        }
-
-        TabButton {
-            id: tabButtonConnection
-            text: "Connection"
-            height: parent.height
-            background: Rectangle {
-                color: parent.active ? "#7CA982" :
                                        (tabBar.currentIndex === 1 ? "#243E36" : "#7CA982")
             }
+
         }
+
+
 
         TabButton {
             id: tabButtonDraw

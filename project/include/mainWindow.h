@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <iostream>
 
+#include "modelforlistofcameras.h"
 #include "comboboxmodel.h"
 #include "objectcamvideo.h"
 #include "opencvimageprovider.h"
@@ -19,7 +20,8 @@ public:
     explicit MainWindow(QQmlApplicationEngine *engine = nullptr,
                         ObjectCamVideo *camera = nullptr,
                         OpencvImageProvider *liveImageProvider = nullptr,
-                        ComboBoxModel *listOfCameras = nullptr);
+                        ComboBoxModel *listOfCameras = nullptr,
+                        ModelForListOfCameras *listOfCameras1 = nullptr);
 
 
 
@@ -38,6 +40,7 @@ private:
     ObjectCamVideo          *camera;
     OpencvImageProvider     *liveImageProvider;
     ComboBoxModel           *listOfCameras;
+    ModelForListOfCameras   *listOfCameras1;
 
     int                     currentIndexOfComboBox = 0;
 

@@ -169,6 +169,7 @@ QStringList ObjectCamVideo::searchConnectedCameras(){
     {
         if (m_stDevList.nDeviceNum == 0){
             std::cout << "No connected cameras were detected" << std::endl;
+            list.append(QString("No connected cameras were detected"));
             //            ShowErrorMsg("No connected cameras were detected", 0);
         }
         else{

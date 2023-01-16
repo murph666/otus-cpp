@@ -4,11 +4,14 @@
 MainWindow::MainWindow(QQmlApplicationEngine *engine,
                        ObjectCamVideo *camera,
                        OpencvImageProvider *liveImageProvider,
-                       ComboBoxModel *listOfCameras){
+                       ComboBoxModel *listOfCameras,
+                       ModelForListOfCameras *listOfCameras1){
     this -> engine = engine;
     this -> camera = camera;
     this -> liveImageProvider = liveImageProvider;
     this -> listOfCameras = listOfCameras;
+    this -> listOfCameras1 = listOfCameras1;
+
 
     this -> ConnectSignals();
 }
@@ -47,6 +50,7 @@ void MainWindow::ConnectSignals(){
 void MainWindow::on_btnSearchClicked(){
     QStringList comboList = camera->searchConnectedCameras();
     listOfCameras->setComboList(comboList);
+//    listOfCameras1->setComboList(comboList);
 
 }
 

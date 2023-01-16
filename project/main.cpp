@@ -8,6 +8,7 @@
 
 #include "mainWindow.h"
 #include "comboboxmodel.h"
+#include "modelforlistofcameras.h"
 
 int main(int argc, char *argv[])
 {
@@ -17,6 +18,7 @@ int main(int argc, char *argv[])
     ObjectCamVideo camera;
     OpencvImageProvider liveImageProvider;
     ComboBoxModel listOfCameras; //объект модель для comboConnectedDevice
+    ModelForListOfCameras listOfCameras1;
 
     const QUrl url(u"/home/murph/Documents/GitHub/otus-cpp/project/ui/main.qml"_qs);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,
@@ -27,11 +29,12 @@ int main(int argc, char *argv[])
 
     //переопределяю qml на объекты cpp
     engine.rootContext() -> setContextProperty("connectedDeviceModel", &listOfCameras);
+    engine.rootContext() -> setContextProperty("connectedDeviceModel1", &listOfCameras1);
     engine.rootContext() -> setContextProperty("liveImageProvider", &liveImageProvider);
     engine.addImageProvider("stream", &liveImageProvider);
 
     engine.load(url);
-    MainWindow backend(&engine, &camera, &liveImageProvider, &listOfCameras);
+    MainWindow backend(&engine, &camera, &liveImageProvider, &listOfCameras, &listOfCameras1);
 
     if (engine.rootObjects().isEmpty())
         return -1;
