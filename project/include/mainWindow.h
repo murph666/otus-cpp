@@ -12,6 +12,14 @@
 #include "opencvimageprovider.h"
 
 
+struct CameraItem
+{
+    int number;
+    QString partName;
+    int status;
+
+};
+
 class MainWindow : public QObject
 {
     Q_OBJECT
@@ -20,9 +28,9 @@ public:
     explicit MainWindow(QQmlApplicationEngine *engine = nullptr,
                         ObjectCamVideo *camera = nullptr,
                         OpencvImageProvider *liveImageProvider = nullptr,
-                        ComboBoxModel *listOfCameras = nullptr,
-                        ModelForListOfCameras *listOfCameras1 = nullptr);
-
+                        ComboBoxModel *listOfCameras = nullptr
+                        );
+    QVector<CameraItem> items();
 
 
     //слоты для QML
@@ -40,7 +48,7 @@ private:
     ObjectCamVideo          *camera;
     OpencvImageProvider     *liveImageProvider;
     ComboBoxModel           *listOfCameras;
-    ModelForListOfCameras   *listOfCameras1;
+    QVector<CameraItem>     m_listOfCameras;
 
     int                     currentIndexOfComboBox = 0;
 
