@@ -14,7 +14,7 @@ int ModelForListOfCameras::rowCount(const QModelIndex &parent) const
         return 0;
 
     // FIXME: Implement me!
-    return m_modelList -> items().size();
+    return 3;
 }
 
 QVariant ModelForListOfCameras::data(const QModelIndex &index, int role) const
@@ -23,6 +23,19 @@ QVariant ModelForListOfCameras::data(const QModelIndex &index, int role) const
         return QVariant();
 
     // FIXME: Implement me!
+    switch (role) {
+    case NumberRole:
+        return QVariant(4);
+        break;
+    case NameRole:
+        return QVariant(QStringLiteral("sadASD"));
+        break;
+    case StatusRole:
+        return QVariant("blue");
+        break;
+    default:
+        break;
+    }
     return QVariant();
 }
 
@@ -36,20 +49,19 @@ bool ModelForListOfCameras::setData(const QModelIndex &index, const QVariant &va
     return false;
 }
 
-void ModelForListOfCameras::setModelList(const QStringList &modelList)
-{
-    if (m_modelList != modelList)
-    {
-        m_comboList = modelList;
-        emit comboListChanged();
-        rowCount(modelList.size());
-    }
-}
-
 Qt::ItemFlags ModelForListOfCameras::flags(const QModelIndex &index) const
 {
     if (!index.isValid())
         return Qt::NoItemFlags;
 
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable; // FIXME: Implement me!
+}
+
+QHash<int, QByteArray> ModelForListOfCameras::roleNames() const
+{
+    QHash<int, QByteArray> list;
+    list[NumberRole] = "number";
+    list[NameRole] = "partnumber";
+    list[StatusRole] = "status";
+    return list;
 }

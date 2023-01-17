@@ -6,7 +6,7 @@
 class ModelForListOfCameras : public QAbstractListModel
 {
     Q_OBJECT
-    Q_PROPERTY(ModelForListOfCameras *list READ list WRITE setList)
+//    Q_PROPERTY(ModelForListOfCameras *list READ list WRITE setList)
 
 public:
     explicit ModelForListOfCameras(QObject *parent = nullptr);
@@ -26,9 +26,9 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value,
                  int role = Qt::EditRole) override;
 
-    ModelForListOfCameras *list() const;
-
     Qt::ItemFlags flags(const QModelIndex& index) const override;
+
+    virtual QHash<int, QByteArray> roleNames() const override;
 
 
 private:

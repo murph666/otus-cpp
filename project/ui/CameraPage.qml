@@ -21,8 +21,8 @@ Item {
         property bool counter: false
         anchors.fill: parent
         anchors.margins: 10
-        onHeightChanged: console.log(this.height)
-        onWidthChanged: console.log(this.width)
+//        onHeightChanged: console.log(this.height)
+//        onWidthChanged: console.log(this.width)
 
         RowLayout {
             id: rowLayout
@@ -314,11 +314,11 @@ Item {
                         spacing: 10
                         interactive: false
 
-                        model: connectedDeviceModel1.comboList
+                        model: connectedDeviceModel1
 
                         delegate: Item {
                             x: 5
-                            width: 65
+                            width: parent.width
                             height: 40
                             Row {
                                 id: listViewRow
@@ -333,57 +333,28 @@ Item {
                                     width:  20
                                     height: 20
                                     radius: 10
-                                    color: colorCode
+                                    color: status
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
 
                                 Text {
-                                    text: name
+                                    text: partnumber
                                     anchors.verticalCenter: parent.verticalCenter
                                     font.bold: true
                                 }
                                 spacing: 10
                             }
                         }
-
-
-//                        model: ListModel {
-//                            ListElement {
-//                                number: 0
-//                                name: "Grey"
-//                                colorCode: "grey"
-//                            }
-
-//                            ListElement {
-//                                number: 1
-//                                name: "Red"
-//                                colorCode: "red"
-//                            }
-
-//                            ListElement {
-//                                name: "Blue"
-//                                colorCode: "blue"
-//                            }
-
-//                            ListElement {
-//                                name: "Green"
-//                                colorCode: "green"
-//                            }
-//                            ListElement {
-//                                name: "Green"
-//                                colorCode: "green"
-//                            }
-//                        }
                     }
 
-//                    Rectangle {
-//                        id: span
-//                        color: "#7CA982"
-//                        Layout.alignment: Qt.AlignHCenter
-//                        Layout.preferredWidth: columnLayout.width - 100
-//                        Layout.preferredHeight: 7
-//                        radius: 5
-//                    }
+                    Rectangle {
+                        id: span
+                        color: "#7CA982"
+                        Layout.alignment: Qt.AlignHCenter
+                        Layout.preferredWidth: columnLayout.width - 100
+                        Layout.preferredHeight: 7
+                        radius: 5
+                    }
                 }
             }
         }
