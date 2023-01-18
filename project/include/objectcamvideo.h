@@ -8,6 +8,7 @@
 #include <opencv2/videoio.hpp>
 
 #include "MvCamera.h"
+#include "modelforlistofcameras.h"
 
 
 typedef struct _FRAME_AS_ARRAY
@@ -31,7 +32,6 @@ public:
 
 
     FRAME_AS_ARRAY            frame;
-    QStringList             searchConnectedCameras();
 
     bool                    m_bGrabbing = false;
     bool                    m_bView = false;

@@ -1,9 +1,16 @@
 #include "modelforlistofcameras.h"
+#include <iostream>
 
 ModelForListOfCameras::ModelForListOfCameras(QObject *parent)
     : QAbstractListModel(parent)
-    , m_modelList(nullptr)
+
 {
+         std::cout << "ModelForListOfCameras created" << std::endl;
+//         CameraItem test = {0, QStringLiteral("name"),QStringLiteral("addr"), 1};
+//         m_listOfCameras.append(test);
+//         test.Number = 1;
+//         test.Status = 0;
+//         m_listOfCameras.append(test);
 }
 
 int ModelForListOfCameras::rowCount(const QModelIndex &parent) const
@@ -12,31 +19,38 @@ int ModelForListOfCameras::rowCount(const QModelIndex &parent) const
     // other (valid) parents, rowCount() should return 0 so that it does not become a tree model.
     if (parent.isValid())
         return 0;
-
+    std::cout << "m_listOfCameras.size(): " << m_listOfCameras.size()<< std::endl;
     // FIXME: Implement me!
-    return 3;
+    return m_listOfCameras.size();
 }
 
 QVariant ModelForListOfCameras::data(const QModelIndex &index, int role) const
 {
+    std::cout << "data" << std::endl;
     if (!index.isValid())
         return QVariant();
 
     // FIXME: Implement me!
+    const CameraItem item = m_listOfCameras.at(index.row());
     switch (role) {
     case NumberRole:
-        return QVariant(4);
+        return QVariant(item.Number);
         break;
     case NameRole:
-        return QVariant(QStringLiteral("sadASD"));
+        return QVariant(item.Name);
         break;
     case StatusRole:
-        return QVariant("blue");
+        return QVariant(item.Status);
         break;
     default:
         break;
     }
     return QVariant();
+}
+
+QVector<CameraItem> ModelForListOfCameras::items()
+{
+    return m_listOfCameras;
 }
 
 bool ModelForListOfCameras::setData(const QModelIndex &index, const QVariant &value, int role)
@@ -62,6 +76,7 @@ QHash<int, QByteArray> ModelForListOfCameras::roleNames() const
     QHash<int, QByteArray> list;
     list[NumberRole] = "number";
     list[NameRole] = "partnumber";
+    list[AddrRole] = "addr";
     list[StatusRole] = "status";
     return list;
 }

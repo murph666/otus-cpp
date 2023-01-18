@@ -3,6 +3,14 @@
 
 #include <QAbstractListModel>
 
+struct CameraItem
+{
+    int Number;
+    QString Name;
+    QString Addr;
+    int Status;
+};
+
 class ModelForListOfCameras : public QAbstractListModel
 {
     Q_OBJECT
@@ -14,6 +22,7 @@ public:
     enum{
         NumberRole,
         NameRole,
+        AddrRole,
         StatusRole
     };
 
@@ -21,6 +30,7 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVector<CameraItem> items();
 
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value,
@@ -32,7 +42,7 @@ public:
 
 
 private:
-    QStringList *m_modelList;
+    QVector<CameraItem>     m_listOfCameras;
 };
 
 #endif // MODELFORLISTOFCAMERAS_H

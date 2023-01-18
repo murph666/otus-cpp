@@ -10,20 +10,19 @@ Window {
     color: "#C2A83E"
     width: 1920
     height: 1080
-    flags: Qt.MSWindowsFixedSizeDialogHint
 
     //Объявляем сигналы
     signal btnSearchClicked()
     signal btnConnectClicked()
-    signal btnGrabbingClicked()
-    signal swchViewToggled(value: bool)
+//    signal btnGrabbingClicked()
+//    signal swchViewToggled(value: bool)
     //    signal textFieldEditingFinished(msg: string)
-    signal cboxAccepted(count: int)
-    signal firstHandleOfThresholdSliderChanged(value: int)
-    signal secondHandleOfThresholdSliderChanged(value: int)
+//    signal cboxAccepted(count: int)
+//    signal firstHandleOfThresholdSliderChanged(value: int)
+//    signal secondHandleOfThresholdSliderChanged(value: int)
 
     //Расположить Окно по центру
-    //    screen: Qt.application.screens[2]
+        screen: Qt.application.screens[0]
     //    visibility: "FullScreen"
     Component.onCompleted: {
         mainWindow.x = Screen.virtualX + (Screen.width - this.width) / 2
