@@ -14,7 +14,7 @@ struct CameraItem
 class ModelForListOfCameras : public QAbstractListModel
 {
     Q_OBJECT
-//    Q_PROPERTY(ModelForListOfCameras *list READ list WRITE setList)
+    Q_PROPERTY(QVariant deviceList READ getDeviceList NOTIFY deviceListUpdated)
 
 public:
     explicit ModelForListOfCameras(QObject *parent = nullptr);
@@ -30,7 +30,6 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-    QVector<CameraItem> items();
 
     // Editable:
     bool setData(const QModelIndex &index, const QVariant &value,
@@ -40,9 +39,15 @@ public:
 
     virtual QHash<int, QByteArray> roleNames() const override;
 
+    void addItem(CameraItem* item);
+    QVector<CameraItem*> getDeviceList();
+
+
+Q_SIGNALS:
+    void deviceListUpdated();
 
 private:
-    QVector<CameraItem>     m_listOfCameras;
+    QVector<CameraItem*>     m_listOfCameras;
 };
 
 #endif // MODELFORLISTOFCAMERAS_H

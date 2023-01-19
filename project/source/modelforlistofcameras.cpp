@@ -5,12 +5,12 @@ ModelForListOfCameras::ModelForListOfCameras(QObject *parent)
     : QAbstractListModel(parent)
 
 {
-         std::cout << "ModelForListOfCameras created" << std::endl;
-//         CameraItem test = {0, QStringLiteral("name"),QStringLiteral("addr"), 1};
-//         m_listOfCameras.append(test);
-//         test.Number = 1;
-//         test.Status = 0;
-//         m_listOfCameras.append(test);
+    std::cout << "ModelForListOfCameras created" << std::endl;
+    //         CameraItem test = {0, QStringLiteral("name"),QStringLiteral("addr"), 1};
+    //         m_listOfCameras.append(test);
+    //         test.Number = 1;
+    //         test.Status = 0;
+    //         m_listOfCameras.append(test);
 }
 
 int ModelForListOfCameras::rowCount(const QModelIndex &parent) const
@@ -31,16 +31,19 @@ QVariant ModelForListOfCameras::data(const QModelIndex &index, int role) const
         return QVariant();
 
     // FIXME: Implement me!
-    const CameraItem item = m_listOfCameras.at(index.row());
+    CameraItem* item = m_listOfCameras.at(index.row());
     switch (role) {
     case NumberRole:
-        return QVariant(item.Number);
+        return QVariant(item->Number);
         break;
     case NameRole:
-        return QVariant(item.Name);
+        return QVariant(item->Name);
+        break;
+    case AddrRole:
+        return QVariant(item->Addr);
         break;
     case StatusRole:
-        return QVariant(item.Status);
+        return QVariant(item->Status);
         break;
     default:
         break;
@@ -48,10 +51,6 @@ QVariant ModelForListOfCameras::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-QVector<CameraItem> ModelForListOfCameras::items()
-{
-    return m_listOfCameras;
-}
 
 bool ModelForListOfCameras::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -80,3 +79,15 @@ QHash<int, QByteArray> ModelForListOfCameras::roleNames() const
     list[StatusRole] = "status";
     return list;
 }
+
+void ModelForListOfCameras::addItem(CameraItem* item)
+{
+    m_listOfCameras.append(item);
+}
+
+QVector<CameraItem *> ModelForListOfCameras::getDeviceList()
+{
+    return m_listOfCameras;
+}
+
+

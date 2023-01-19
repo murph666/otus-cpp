@@ -59,7 +59,7 @@ void MainWindow::on_btnSearchClicked(){
         }
         else{
             for (unsigned int i = 0; i < m_stDevList.nDeviceNum; i++){
-                CameraItem bufItem;
+                CameraItem *bufItem = new CameraItem;
                 QString strMsg;
                 MV_CC_DEVICE_INFO* pDeviceInfo = m_stDevList.pDeviceInfo[i];
                 if (NULL == pDeviceInfo)
@@ -97,12 +97,14 @@ void MainWindow::on_btnSearchClicked(){
                                                                           QString::number(nIp3),
                                                                           QString::number(nIp4));
                         std::cout << strMsg.toStdString() << std::endl;
-                        bufItem.Number = i;
-                        bufItem.Name = qstrModelName;
-                        bufItem.Addr = QString("%2.%3.%4.%5").arg(QString::number(nIp1),
+                        bufItem ->Number = i;
+                        bufItem->Name = qstrModelName;
+                        bufItem->Addr = QString("%2.%3.%4.%5").arg(QString::number(nIp1),
                                                                   QString::number(nIp2),
                                                                   QString::number(nIp3),
                                                                   QString::number(nIp4));
+
+                         bufItem->Status = 1;
 
                     }
                 }
@@ -122,8 +124,10 @@ void MainWindow::on_btnSearchClicked(){
                         strMsg = QString("[%0]UsbV3:  %1").arg(QString::number(i),
                                                                qstrModelName);
                         std::cout << strMsg.toStdString() << std::endl;
-                        bufItem.Number = i;
-                        bufItem.Name = qstrModelName;
+                        bufItem->Number = i;
+                        bufItem->Name = qstrModelName;
+                        bufItem->Status = 1;
+
                     }
                 }
                 else
@@ -131,16 +135,22 @@ void MainWindow::on_btnSearchClicked(){
                     std::cout << "Unknown device enumerated" << std::endl;
                     //                    ShowErrorMsg("Unknown device enumerated", 0);
                 }
-                CameraItem test = {0, QStringLiteral("name"),QStringLiteral("addr"), 1};
-                this -> modelForListOfCameras->items().append(test);
+                this -> modelForListOfCameras->addItem(bufItem);
             }
         }
     }
+    emit modelForListOfCameras->deviceListUpdated();
 
 }
 
 void MainWindow::on_btnConnectClicked(){
     std::cout << "on_btnConnectClicked:" << std::endl;
+//    for (int i = 0; ; i++){
+//        std::cout << "on_btnConnectClicked:" << modelForListOfCameras ->items().at(i).Addr.toStdString() << std::endl;
+//        if (i == modelForListOfCameras->items().size() - 1) break;
+//    }
+
+
     //    camera->openCamera(&currentIndexOfComboBox);
 }
 

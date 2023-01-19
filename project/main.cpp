@@ -7,7 +7,7 @@
 #include <opencv2/videoio.hpp>
 
 #include "mainWindow.h"
-#include "comboboxmodel.h"
+//#include "comboboxmodel.h"
 #include "modelforlistofcameras.h"
 
 int main(int argc, char *argv[])

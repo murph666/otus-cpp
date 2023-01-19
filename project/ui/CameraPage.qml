@@ -91,7 +91,7 @@ Item {
                         spacing: 10
                         interactive: false
 
-                        model: modelForListOfCameras.list
+                        model: modelForListOfCameras.deviceList
 
                         delegate: Item {
                             x: 5
@@ -106,20 +106,17 @@ Item {
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
 
-                                Item {
-                                        Text {
-                                            text: partnumber
-                                            anchors.verticalCenter: parent.verticalCenter
-                                            font.bold: true
-                                        }
-                                        Text {
-                                            text: addr
-                                            anchors.verticalCenter: parent.verticalCenter
-                                            font.bold: true
-                                        }
 
+                                Text {
+                                    text: partnumber
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.bold: true
                                 }
-
+                                Text {
+                                    text: addr
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    font.bold: true
+                                }
 
                                 Rectangle {
                                     width:  20
