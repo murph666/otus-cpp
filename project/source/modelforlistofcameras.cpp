@@ -79,15 +79,15 @@ QHash<int, QByteArray> ModelForListOfCameras::roleNames() const
     list[StatusRole] = "status";
     return list;
 }
-
 void ModelForListOfCameras::addItem(CameraItem* item)
 {
     m_listOfCameras.append(item);
 }
 
-QVector<CameraItem *> ModelForListOfCameras::getDeviceList()
+QVector<CameraItem> ModelForListOfCameras::getDeviceList()
 {
-    return m_listOfCameras;
+    CameraItem test = {0, QStringLiteral("name"),QStringLiteral("addr"), 1};
+    return QVariant(test);
 }
 
 

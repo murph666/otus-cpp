@@ -40,7 +40,7 @@ public:
     virtual QHash<int, QByteArray> roleNames() const override;
 
     void addItem(CameraItem* item);
-    QVector<CameraItem*> getDeviceList();
+    QVector<CameraItem> getDeviceList();
 
 
 Q_SIGNALS:
